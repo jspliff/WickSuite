@@ -1,0 +1,27 @@
+# Wick Suite
+
+> Three precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
+
+## The addons
+
+| Addon | CurseForge | GitHub |
+|---|---|---|
+| **Wick's TBC BIS Tracker** | [install](https://www.curseforge.com/wow/addons/wicks-tbc-bis-tracker) | [repo](https://github.com/jspliff/WickidsTBCBISTracker) · [wiki](https://github.com/jspliff/WickidsTBCBISTracker/wiki) |
+| **Wick's CD Tracker** | [install](https://www.curseforge.com/wow/addons/wicks-cd-tracker) | [repo](https://github.com/jspliff/WicksCDTracker) · [wiki](https://github.com/jspliff/WicksCDTracker/wiki) |
+| **Wick's Trade Hall** | [install](https://www.curseforge.com/wow/addons/trade-hall) | [repo](https://github.com/jspliff/WicksTradeHall) · [wiki](https://github.com/jspliff/WicksTradeHall/wiki) |
+
+## Wiki pages
+
+- **[[Brand Identity|Brand-Identity]]** — locked palette, chrome, typography, naming convention
+- **[[Trademark]]** — what you may and may not do with the Wick name, logomark, and visual system
+- **[[For Developers|For-Developers]]** — repo conventions, how to write a new Wick addon
+
+## This repo
+
+Brand assets only. Not a WoW addon.
+
+- `logo.svg` — logomark source (flame + wick + brackets)
+- `brand-identity.html` — one-pager defining the brand system
+- `thumbnails.html` — all store artwork (suite banner + 4 per-addon thumbnails, native-size, ready to screenshot)
+- `LICENSE` — MIT for code / docs
+- `TRADEMARK.md` — brand usage policy

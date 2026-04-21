@@ -1,0 +1,24 @@
+# Env / secrets
+.env
+.env.*
+*.token
+
+# Design handoff raw assets (keep local if you drop them here)
+addon-branding/
+*.tar
+*.tar.gz
+*.bin
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Screenshots / exports
+exports/
+*.png
+*.jpg
+!logo*.png

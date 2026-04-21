@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wick — Brand Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --green:    #4FC778;
+    --bg:       #0D0A14;
+    --header:   #171124;
+    --border:   #383058;
+    --text:     #D4C8A1;
+    --text-dim: #7A6E58;
+    --text-muted: #4A4235;
+
+    --bracket-arm: 10px;
+    --bracket-w:   2px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 48px 60px 80px;
+  }
+
+  /* ─── CHROME: L-bracket corners ─────────────────────────── */
+  .panel {
+    position: relative;
+    background: var(--header);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+  }
+
+  .panel::before, .panel::after,
+  .panel > .br::before, .panel > .br::after {
+    content: '';
+    position: absolute;
+    width: var(--bracket-arm);
+    height: var(--bracket-arm);
+  }
+
+  /* top-left */
+  .panel::before {
+    top: -var(--bracket-w); left: -var(--bracket-w);
+    top: -1px; left: -1px;
+    border-top: var(--bracket-w) solid var(--green);
+    border-left: var(--bracket-w) solid var(--green);
+  }
+  /* top-right */
+  .panel::after {
+    top: -1px; right: -1px;
+    border-top: var(--bracket-w) solid var(--green);
+    border-right: var(--bracket-w) solid var(--green);
+  }
+  /* bottom-right */
+  .panel > .br::before {
+    bottom: -1px; right: -1px;
+    border-bottom: var(--bracket-w) solid var(--green);
+    border-right: var(--bracket-w) solid var(--green);
+  }
+  /* bottom-left */
+  .panel > .br::after {
+    bottom: -1px; left: -1px;
+    border-bottom: var(--bracket-w) solid var(--green);
+    border-left: var(--bracket-w) solid var(--green);
+  }
+
+  /* ─── SECTION LABEL ────────────────────────────────────── */
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── PAGE HEADER ──────────────────────────────────────── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background: var(--header);
+    border: 1px solid var(--border);
+    margin-bottom: 2px;
+  }
+  .page-header-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .page-header-label span { color: var(--green); }
+
+  /* ─── HERO ─────────────────────────────────────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .hero-wordmark {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 64px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+  }
+
+  .wordmark-text {
+    font-family: 'Cinzel', serif;
+    font-size: 96px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .wordmark-tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .wordmark-versions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .wv-row {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+
+  .wv-size {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: var(--text-muted);
+    width: 28px;
+    text-align: right;
+  }
+
+  .wv-wordmark {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .hero-logomark {
+    background: var(--header);
+    border: 1px solid var(--border);
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    position: relative;
+  }
+
+  /* ─── LOGOMARK SVG ─────────────────────────────────────── */
+  .logomark-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .logomark-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logomark-item label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ─── GRID LAYOUT ───────────────────────────────────────── */
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .row-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  /* ─── SWATCHES ─────────────────────────────────────────── */
+  .swatch-section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  .swatch-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .swatch-block {
+    height: 64px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .swatch-block.has-bracket::before,
+  .swatch-block.has-bracket::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+  }
+  .swatch-block.has-bracket::before {
+    top: -1px; left: -1px;
+    border-top: 2px solid var(--green);
+    border-left: 2px solid var(--green);
+  }
+  .swatch-block.has-bracket::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid var(--green);
+    border-right: 2px solid var(--green);
+  }
+
+  .swatch-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .swatch-hex {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+  }
+
+  .swatch-role {
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  /* ─── TYPOGRAPHY ────────────────────────────────────────── */
+  .type-section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  .type-specimen {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 0;
+  }
+
+  .type-row {
+    display: contents;
+  }
+
+  .type-meta {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-right: 24px;
+  }
+
+  .type-meta:last-of-type, .type-preview:last-of-type {
+    border-bottom: none;
+  }
+
+  .type-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  .type-spec {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .type-preview {
+    padding: 16px 0 16px 24px;
+    border-bottom: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+
+  /* ─── ADDON LOCKUPS ─────────────────────────────────────── */
+  .lockup-section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  .lockup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .lockup-card {
+    background: var(--header);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* mini brackets on lockup cards */
+  .lockup-card::before, .lockup-card::after {
+    content: '';
+    position: absolute;
+    width: 7px; height: 7px;
+  }
+  .lockup-card::before {
+    top: -1px; left: -1px;
+    border-top: 2px solid var(--green);
+    border-left: 2px solid var(--green);
+  }
+  .lockup-card::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid var(--green);
+    border-right: 2px solid var(--green);
+  }
+
+  .lockup-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lockup-icon {
+    width: 28px; height: 28px;
+    flex-shrink: 0;
+  }
+
+  .lockup-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .lockup-name-bold { color: var(--green); }
+
+  .lockup-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  .lockup-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 2px 7px;
+    opacity: 0.7;
+    margin-top: 4px;
+    align-self: flex-start;
+  }
+
+  /* ─── VOICE & NAMING ─────────────────────────────────────── */
+  .naming-section {
+    background: var(--header);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  .naming-formula {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-bottom: 20px;
+  }
+
+  .nf-part {
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+  }
+
+  .nf-sep {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    padding: 0 8px;
+  }
+
+  .nf-part.accent { color: var(--green); border-color: var(--green); }
+
+  .naming-rules {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .naming-rule {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .nr-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  .nr-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── FOOTER ─────────────────────────────────────────────── */
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background: var(--header);
+    border: 1px solid var(--border);
+    margin-top: 2px;
+  }
+
+  .footer-sig {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-sig span { color: var(--green); }
+
+  /* ─── CHROME ON SECTIONS ────────────────────────────────── */
+  .with-chrome {
+    position: relative;
+  }
+  .with-chrome::before, .with-chrome::after {
+    content: '';
+    position: absolute;
+    width: var(--bracket-arm);
+    height: var(--bracket-arm);
+    z-index: 1;
+  }
+  .with-chrome::before {
+    top: -1px; left: -1px;
+    border-top: var(--bracket-w) solid var(--green);
+    border-left: var(--bracket-w) solid var(--green);
+  }
+  .with-chrome::after {
+    top: -1px; right: -1px;
+    border-top: var(--bracket-w) solid var(--green);
+    border-right: var(--bracket-w) solid var(--green);
+  }
+  .with-chrome .bl::before, .with-chrome .bl::after {
+    content: '';
+    position: absolute;
+    width: var(--bracket-arm);
+    height: var(--bracket-arm);
+    z-index: 1;
+  }
+  .with-chrome .bl::before {
+    bottom: -1px; right: -1px;
+    border-bottom: var(--bracket-w) solid var(--green);
+    border-right: var(--bracket-w) solid var(--green);
+  }
+  .with-chrome .bl::after {
+    bottom: -1px; left: -1px;
+    border-bottom: var(--bracket-w) solid var(--green);
+    border-left: var(--bracket-w) solid var(--green);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 4px; height: 4px;
+    background: var(--green);
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header with-chrome">
+  <div class="bl"></div>
+  <span class="page-header-label"><span>Wick</span> — Brand Identity System · v1.0 · TBC Classic Addon Suite</span>
+  <span class="page-header-label">April 2026</span>
+</div>
+
+<div style="height:2px"></div>
+
+<!-- HERO: WORDMARK + LOGOMARK -->
+<div class="hero">
+
+  <!-- Wordmark panel -->
+  <div class="hero-wordmark with-chrome">
+    <div class="bl"></div>
+    <div class="section-label">01 — Wordmark</div>
+
+    <div class="wordmark-text">Wick</div>
+    <div class="wordmark-tagline">TBC Classic Addon Suite</div>
+
+    <div class="divider" style="width:100%"></div>
+
+    <div class="wordmark-versions">
+      <div class="wv-row">
+        <span class="wv-size">72px</span>
+        <span class="wv-wordmark" style="font-size:42px">Wick</span>
+      </div>
+      <div class="wv-row">
+        <span class="wv-size">48px</span>
+        <span class="wv-wordmark" style="font-size:28px">Wick</span>
+      </div>
+      <div class="wv-row">
+        <span class="wv-size">24px</span>
+        <span class="wv-wordmark" style="font-size:18px">Wick</span>
+      </div>
+      <div class="wv-row">
+        <span class="wv-size">12px</span>
+        <span class="wv-wordmark" style="font-size:12px">Wick</span>
+      </div>
+    </div>
+
+    <div class="divider" style="width:100%"></div>
+
+    <div style="display:flex; gap: 16px; align-items:center">
+      <!-- Dark bg version -->
+      <div style="padding: 10px 18px; background: var(--bg); border: 1px solid var(--border);">
+        <span style="font-family:'Cinzel',serif; font-size:22px; font-weight:700; color:var(--text)">Wick</span>
+      </div>
+      <!-- Light bg version -->
+      <div style="padding: 10px 18px; background: #D4C8A1; border: 1px solid var(--border);">
+        <span style="font-family:'Cinzel',serif; font-size:22px; font-weight:700; color:var(--bg)">Wick</span>
+      </div>
+      <!-- Accent version -->
+      <div style="padding: 10px 18px; background: var(--header); border: 1px solid var(--green);">
+        <span style="font-family:'Cinzel',serif; font-size:22px; font-weight:700; color:var(--green)">Wick</span>
+      </div>
+    </div>
+
+    <div style="margin-top:8px; display:flex; gap:12px">
+      <span style="font-family:'Space Mono',monospace; font-size:8px; color:var(--text-dim)">— On dark</span>
+      <span style="font-family:'Space Mono',monospace; font-size:8px; color:var(--text-dim)">— On light</span>
+      <span style="font-family:'Space Mono',monospace; font-size:8px; color:var(--text-dim)">— Accent</span>
+    </div>
+  </div>
+
+  <!-- Logomark panel -->
+  <div class="hero-logomark with-chrome">
+    <div class="bl"></div>
+    <div class="section-label" style="width:100%; align-self:flex-start">02 — Logomark</div>
+
+    <div class="logomark-grid">
+
+      <!-- Large: full color -->
+      <div class="logomark-item">
+        <svg width="80" height="96" viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- wick stem -->
+          <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+          <!-- base / wax pool -->
+          <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+          <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+          <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+          <!-- flame outer -->
+          <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+          <!-- flame mid -->
+          <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+          <!-- flame core -->
+          <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+          <!-- flame highlight -->
+          <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+          <!-- wick dot top -->
+          <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+          <!-- corner bracket: top-left of bounding box -->
+          <path d="M4 4 L4 16 M4 4 L16 4" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+          <!-- corner bracket: bottom-right -->
+          <path d="M76 92 L76 80 M76 92 L64 92" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+        </svg>
+        <label>Full Color</label>
+      </div>
+
+      <!-- Medium: white/mono -->
+      <div class="logomark-item">
+        <svg width="60" height="72" viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="38" y="52" width="4" height="36" fill="#D4C8A1" opacity="0.4"/>
+          <ellipse cx="40" cy="88" rx="18" ry="5" fill="#D4C8A1" opacity="0.1"/>
+          <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+          <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#D4C8A1" opacity="0.12"/>
+          <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#D4C8A1" opacity="0.3"/>
+          <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#D4C8A1" opacity="0.7"/>
+          <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#fff" opacity="0.6"/>
+          <circle cx="40" cy="52" r="2" fill="#D4C8A1"/>
+          <path d="M4 4 L4 16 M4 4 L16 4" stroke="#D4C8A1" stroke-width="2" stroke-linecap="square" opacity="0.5"/>
+          <path d="M76 92 L76 80 M76 92 L64 92" stroke="#D4C8A1" stroke-width="2" stroke-linecap="square" opacity="0.5"/>
+        </svg>
+        <label>Mono / On dark</label>
+      </div>
+
+      <!-- Small: icon only, flat -->
+      <div class="logomark-item">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" fill="#171124"/>
+          <!-- simplified flame icon -->
+          <rect x="18.5" y="24" width="3" height="12" rx="0" fill="#4FC778" opacity="0.5"/>
+          <rect x="14" y="34" width="12" height="4" rx="0" fill="#383058"/>
+          <path d="M20 3 C20 3, 29 14, 29 22 C29 27.5, 25.1 31, 20 31 C14.9 31, 11 27.5, 11 22 C11 14, 20 3 Z" fill="#4FC778" opacity="0.2"/>
+          <path d="M20 8 C20 8, 26 17, 26 22 C26 25.4, 23.3 28, 20 28 C16.7 28, 14 25.4, 14 22 C14 17, 20 8 Z" fill="#4FC778" opacity="0.55"/>
+          <path d="M20 13 C20 13, 23 18.5, 23 22 C23 24.2, 21.7 25.5, 20 25.5 C18.3 25.5, 17 24.2, 17 22 C17 18.5, 20 13 Z" fill="#D4C8A1" opacity="0.75"/>
+          <circle cx="20" cy="24" r="1.5" fill="#4FC778"/>
+          <!-- corner brackets -->
+          <path d="M2 2 L2 7 M2 2 L7 2" stroke="#4FC778" stroke-width="1.5" stroke-linecap="square"/>
+          <path d="M38 38 L38 33 M38 38 L33 38" stroke="#4FC778" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+        <label>Icon / 40px</label>
+      </div>
+
+    </div>
+
+    <div class="divider" style="width:100%"></div>
+    <div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--text-dim); line-height:1.8; text-align:center">
+      Geometric teardrop flame · Radiating opacity layers · Wick-dot at base<br>
+      L-bracket chrome flanks the mark at all scales
+    </div>
+  </div>
+</div>
+
+<!-- COLOR SWATCHES -->
+<div class="swatch-section with-chrome" style="margin-bottom:2px">
+  <div class="bl"></div>
+  <div class="section-label">03 — Color System</div>
+  <div class="swatch-grid">
+
+    <div class="swatch-item">
+      <div class="swatch-block has-bracket" style="background:#4FC778"></div>
+      <div class="swatch-name">Fel Green</div>
+      <div class="swatch-hex">#4FC778</div>
+      <div class="swatch-role">Primary accent · Chrome · Active states · Links</div>
+    </div>
+
+    <div class="swatch-item">
+      <div class="swatch-block" style="background:#0D0A14; border-color:var(--border)"></div>
+      <div class="swatch-name">Void</div>
+      <div class="swatch-hex">#0D0A14</div>
+      <div class="swatch-role">Panel background · Page canvas · Deep base</div>
+    </div>
+
+    <div class="swatch-item">
+      <div class="swatch-block" style="background:#171124"></div>
+      <div class="swatch-name">Shadow</div>
+      <div class="swatch-hex">#171124</div>
+      <div class="swatch-role">Header strip · Card surfaces · Secondary panels</div>
+    </div>
+
+    <div class="swatch-item">
+      <div class="swatch-block" style="background:#383058"></div>
+      <div class="swatch-name">Muted Purple</div>
+      <div class="swatch-hex">#383058</div>
+      <div class="swatch-role">Borders · Dividers · Subtle UI strokes</div>
+    </div>
+
+    <div class="swatch-item">
+      <div class="swatch-block" style="background:#D4C8A1"></div>
+      <div class="swatch-name">Off-White</div>
+      <div class="swatch-hex">#D4C8A1</div>
+      <div class="swatch-role">Primary text · Body copy · Labels</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TYPOGRAPHY -->
+<div class="type-section with-chrome" style="margin-bottom:2px">
+  <div class="bl"></div>
+  <div class="section-label">04 — Typography</div>
+
+  <div class="type-specimen">
+
+    <!-- Display -->
+    <div class="type-meta">
+      <div class="type-name">Display</div>
+      <div class="type-spec">
+        Cinzel · Bold 700<br>
+        32–96px · -0.02em<br>
+        Wordmark, headlines
+      </div>
+    </div>
+    <div class="type-preview">
+      <span style="font-family:'Cinzel',serif; font-size:36px; font-weight:700; letter-spacing:-0.02em; color:var(--text)">Wick's BIS Tracker</span>
+    </div>
+
+    <!-- UI Body -->
+    <div class="type-meta">
+      <div class="type-name">UI / Body</div>
+      <div class="type-spec">
+        Space Grotesk · 400–600<br>
+        12–16px · 0em<br>
+        Labels, descriptions
+      </div>
+    </div>
+    <div class="type-preview">
+      <div>
+        <div style="font-size:15px; font-weight:600; color:var(--text); margin-bottom:4px">Best in Slot gear tracker for TBC Classic raiders</div>
+        <div style="font-size:12px; color:var(--text-dim)">Track your bis list, compare upgrades, and share with your guild.</div>
+      </div>
+    </div>
+
+    <!-- Mono / Code -->
+    <div class="type-meta" style="border-bottom:none">
+      <div class="type-name">Mono</div>
+      <div class="type-spec">
+        Space Mono · 400<br>
+        8–11px · 0.15–0.25em<br>
+        Labels, hex values, tags
+      </div>
+    </div>
+    <div class="type-preview" style="border-bottom:none">
+      <div style="display:flex; flex-direction:column; gap:6px">
+        <span style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.25em; text-transform:uppercase; color:var(--green)">STATUS · ACTIVE · v2.4.1</span>
+        <span style="font-family:'Space Mono',monospace; font-size:10px; color:var(--text-dim)">#4FC778 · #0D0A14 · #D4C8A1</span>
+        <span style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted)">SECTION LABEL · METADATA · TAGS</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADDON LOCKUPS -->
+<div class="lockup-section with-chrome" style="margin-bottom:2px">
+  <div class="bl"></div>
+  <div class="section-label">05 — Addon Lockups</div>
+
+  <div class="lockup-grid">
+
+    <!-- BIS Tracker -->
+    <div class="lockup-card">
+      <div class="lockup-header">
+        <!-- BIS icon: target/gear -->
+        <svg class="lockup-icon" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" fill="#0D0A14"/>
+          <circle cx="14" cy="14" r="9" stroke="#383058" stroke-width="1"/>
+          <circle cx="14" cy="14" r="5" stroke="#4FC778" stroke-width="1" opacity="0.6"/>
+          <circle cx="14" cy="14" r="2" fill="#4FC778"/>
+          <line x1="14" y1="5" x2="14" y2="8" stroke="#4FC778" stroke-width="1" opacity="0.5"/>
+          <line x1="14" y1="20" x2="14" y2="23" stroke="#4FC778" stroke-width="1" opacity="0.5"/>
+          <line x1="5" y1="14" x2="8" y2="14" stroke="#4FC778" stroke-width="1" opacity="0.5"/>
+          <line x1="20" y1="14" x2="23" y2="14" stroke="#4FC778" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <div>
+          <div class="lockup-name"><span class="lockup-name-bold">Wick's</span> BIS Tracker</div>
+        </div>
+      </div>
+      <div class="lockup-desc">Best-in-slot gear tracking for TBC Classic. Compare items across phases, track acquisition status per slot, export list to guild.</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap">
+        <span class="lockup-tag">Gear</span>
+        <span class="lockup-tag">Raiding</span>
+        <span class="lockup-tag">Phase-aware</span>
+      </div>
+    </div>
+
+    <!-- CD Tracker -->
+    <div class="lockup-card">
+      <div class="lockup-header">
+        <!-- CD icon: clock -->
+        <svg class="lockup-icon" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" fill="#0D0A14"/>
+          <circle cx="14" cy="14" r="9" stroke="#383058" stroke-width="1"/>
+          <circle cx="14" cy="14" r="9" stroke="#4FC778" stroke-width="1" stroke-dasharray="4 2" opacity="0.35"/>
+          <line x1="14" y1="14" x2="14" y2="8" stroke="#4FC778" stroke-width="1.5" stroke-linecap="square"/>
+          <line x1="14" y1="14" x2="19" y2="16" stroke="#D4C8A1" stroke-width="1" stroke-linecap="square" opacity="0.6"/>
+          <circle cx="14" cy="14" r="1.5" fill="#4FC778"/>
+        </svg>
+        <div>
+          <div class="lockup-name"><span class="lockup-name-bold">Wick's</span> CD Tracker</div>
+        </div>
+      </div>
+      <div class="lockup-desc">Raid-wide cooldown tracker. Monitor trinkets, battle res, bloodlust, and class abilities across your entire raid in real time.</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap">
+        <span class="lockup-tag">Cooldowns</span>
+        <span class="lockup-tag">Raid</span>
+        <span class="lockup-tag">Real-time</span>
+      </div>
+    </div>
+
+    <!-- Trade Hall -->
+    <div class="lockup-card">
+      <div class="lockup-header">
+        <!-- Trade icon: two arrows -->
+        <svg class="lockup-icon" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" fill="#0D0A14"/>
+          <rect x="4" y="10" width="14" height="4" rx="0" fill="#383058"/>
+          <rect x="4" y="10" width="14" height="4" rx="0" fill="#4FC778" opacity="0.25"/>
+          <path d="M16 8 L22 12 L16 16" stroke="#4FC778" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+          <rect x="10" y="14" width="14" height="4" rx="0" fill="#383058"/>
+          <rect x="10" y="14" width="14" height="4" rx="0" fill="#D4C8A1" opacity="0.12"/>
+          <path d="M12 12 L6 16 L12 20" stroke="#D4C8A1" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter" opacity="0.5"/>
+        </svg>
+        <div>
+          <div class="lockup-name"><span class="lockup-name-bold">Wick's</span> Trade Hall</div>
+        </div>
+      </div>
+      <div class="lockup-desc">Streamlined trade window replacement. Log trades, flag disputed items, surface AH prices inline. Built for guild crafting workflows.</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap">
+        <span class="lockup-tag">Economy</span>
+        <span class="lockup-tag">Crafting</span>
+        <span class="lockup-tag">Guild</span>
+      </div>
+    </div>
+
+    <!-- Poly Alert -->
+    <div class="lockup-card">
+      <div class="lockup-header">
+        <!-- Poly icon: sheep silhouette hint / alert triangle -->
+        <svg class="lockup-icon" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" fill="#0D0A14"/>
+          <!-- alert triangle -->
+          <path d="M14 5 L24 22 L4 22 Z" stroke="#383058" stroke-width="1" fill="none"/>
+          <path d="M14 5 L24 22 L4 22 Z" stroke="#4FC778" stroke-width="1" fill="none" opacity="0.4"/>
+          <!-- ! mark -->
+          <rect x="13" y="11" width="2" height="6" rx="0" fill="#4FC778"/>
+          <rect x="13" y="19" width="2" height="2" rx="0" fill="#4FC778"/>
+        </svg>
+        <div>
+          <div class="lockup-name"><span class="lockup-name-bold">Wick's</span> Poly Alert</div>
+        </div>
+      </div>
+      <div class="lockup-desc">Crowd control alert system. Audible and visual warnings when polymorphed targets are about to break. Configurable thresholds per fight.</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap">
+        <span class="lockup-tag">CC</span>
+        <span class="lockup-tag">Alerts</span>
+        <span class="lockup-tag">Combat</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NAMING CONVENTION -->
+<div class="naming-section with-chrome" style="margin-bottom:2px">
+  <div class="bl"></div>
+  <div class="section-label">06 — Naming Convention</div>
+
+  <div class="naming-formula">
+    <div class="nf-part accent">Wick's</div>
+    <span class="nf-sep">+</span>
+    <div class="nf-part">[Function]</div>
+    <span class="nf-sep">+</span>
+    <div class="nf-part">[Noun]</div>
+  </div>
+
+  <div class="naming-rules">
+    <div class="naming-rule">
+      <div class="nr-label"><span class="dot"></span>Possessive prefix</div>
+      <div class="nr-text">Always "Wick's" — not "Wick" alone. Possessive signals authorship and creates a consistent family across the suite.</div>
+    </div>
+    <div class="naming-rule">
+      <div class="nr-label"><span class="dot"></span>Functional noun</div>
+      <div class="nr-text">Two words max. Clear, literal, no fantasy puns. Raider and casual alike must immediately understand the addon's purpose.</div>
+    </div>
+    <div class="naming-rule">
+      <div class="nr-label"><span class="dot"></span>Tone</div>
+      <div class="nr-text">Professional. No abbreviations in the full name (CD is fine in-game shorthand). No numerals. No v2 suffixes in the brand name.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer with-chrome">
+  <div class="bl"></div>
+  <span class="footer-sig"><span>Wick</span> · TBC Classic Addon Suite · Brand Identity v1.0</span>
+  <span class="footer-sig">Cinzel + Space Grotesk + Space Mono · <span>#4FC778</span></span>
+</div>
+
+</body>
+</html>

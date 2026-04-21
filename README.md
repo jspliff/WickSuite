@@ -8,11 +8,13 @@ This repo holds the **brand assets** for the Wick addon suite — not a WoW addo
 
 ## The suite
 
-| Addon | GitHub | CurseForge | What it does |
-|---|---|---|---|
-| **Wick's TBC BIS Tracker** | [repo](https://github.com/jspliff/WickidsTBCBISTracker) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-tbc-bis-tracker) | BIS gear tracker — every class, every spec, every phase |
-| **Wick's CD Tracker** | [repo](https://github.com/jspliff/WicksCDTracker) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-cd-tracker) | Live party/raid cooldown tracker |
-| **Wick's Trade Hall** | [repo](https://github.com/jspliff/WicksTradeHall) | [CurseForge](https://www.curseforge.com/wow/addons/trade-hall) | Trade channel scanner + bulletin board |
+<!-- wick:suite-table:start -->
+| Addon | GitHub | CurseForge |
+|---|---|---|
+| **Wick's TBC BIS Tracker** | [repo](https://github.com/jspliff/WickidsTBCBISTracker) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-tbc-bis-tracker) |
+| **Wick's CD Tracker** | [repo](https://github.com/jspliff/WicksCDTracker) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-cd-tracker) |
+| **Wick's Trade Hall** | [repo](https://github.com/jspliff/WicksTradeHall) | [CurseForge](https://www.curseforge.com/wow/addons/trade-hall) |
+<!-- wick:suite-table:end -->
 
 ## Contents
 

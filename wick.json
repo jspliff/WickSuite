@@ -1,0 +1,73 @@
+{
+  "$schema": "./wick.schema.json",
+  "author": "Wick",
+  "author_email": "Jason@s-56.com",
+  "github_user": "jspliff",
+  "cf_api_base": "https://wow.curseforge.com",
+  "cf_game_version_id": 14300,
+  "cf_game_version_type_id": 73246,
+  "interface": "20505",
+  "addons_root_local": "C:\\Program Files (x86)\\World of Warcraft\\_anniversary_\\Interface\\AddOns",
+  "project_home": "C:\\Users\\jspli\\Projects\\Wick",
+  "suite_repo": "WickSuite",
+  "addons": [
+    {
+      "folder": "WickidsTBCBISTracker",
+      "title": "Wick's TBC BIS Tracker",
+      "short": "BIS Tracker",
+      "slash": "/wtbt",
+      "tagline": "Best-in-slot gear tracking for every class, every spec, every phase of TBC Classic.",
+      "accent": "#a335ee",
+      "accent_name": "epic",
+      "cf_slug": "wicks-tbc-bis-tracker",
+      "cf_project_id": null,
+      "features": [
+        "Every class · every spec",
+        "All TBC phases",
+        "SoftRes integration"
+      ],
+      "repo": "WickidsTBCBISTracker"
+    },
+    {
+      "folder": "WicksCDTracker",
+      "title": "Wick's CD Tracker",
+      "short": "CD Tracker",
+      "slash": "/wcdt",
+      "tagline": "Live party and raid cooldown tracker. Kicks, saves, offensives, utility — all in one tight panel.",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-cd-tracker",
+      "cf_project_id": 1519143,
+      "features": [
+        "Kicks · saves · offensives",
+        "Class-colored rows",
+        "Per-spell settings"
+      ],
+      "repo": "WicksCDTracker"
+    },
+    {
+      "folder": "WicksTradeHall",
+      "title": "Wick's Trade Hall",
+      "short": "Trade Hall",
+      "slash": "/wth",
+      "tagline": "Trade channel, as a bulletin board. Seven categories, aged-out listings, no wall-of-spam.",
+      "accent": "#f59e0b",
+      "accent_name": "amber",
+      "cf_slug": "trade-hall",
+      "cf_project_id": null,
+      "features": [
+        "7 categories",
+        "Aged-out fade",
+        "Inline item tooltips"
+      ],
+      "repo": "WicksTradeHall"
+    }
+  ],
+  "retired": [
+    {
+      "folder": "WickPolyAlert",
+      "reason": "User does not use it. Deleted 2026-04-21. Do NOT recreate unless explicitly asked.",
+      "date": "2026-04-21"
+    }
+  ]
+}

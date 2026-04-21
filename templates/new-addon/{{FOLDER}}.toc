@@ -1,0 +1,9 @@
+## Interface: 20505
+## Title: {{TITLE}}
+## Notes: {{TAGLINE}}
+## Author: Wick
+## Version: 0.1.0
+## SavedVariables: {{SAVEDVARS}}
+
+Core.lua
+UI.lua

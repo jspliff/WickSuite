@@ -1,0 +1,31 @@
+# CurseForge marketing / account info — kept local, not pushed
+curseforge-page.md
+.cf-project-id
+.cf-slug
+
+# CurseForge API tokens & secrets
+.env
+.env.*
+*.token
+cf-token*
+curseforge-token*
+secrets.lua
+
+# Distribution artifacts
+*.zip
+*.tar.gz
+release/
+dist/
+
+# WoW SavedVariables (never commit)
+WTF/
+*.lua.bak
+
+# OS / editor / tool config
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+.claude/

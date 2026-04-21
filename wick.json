@@ -61,6 +61,23 @@
         "Inline item tooltips"
       ],
       "repo": "WicksTradeHall"
+    },
+    {
+      "folder": "WicksMacroBuilder",
+      "title": "Wick's Macro Builder",
+      "short": "Macro Builder",
+      "slash": "/wsmb",
+      "tagline": "Clean macro editor with conditional chips, command shortcuts, and curated class presets for all 9 classes.",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-macro-builder",
+      "cf_project_id": null,
+      "features": [
+        "Conditional + command chips",
+        "9-class preset library",
+        "Live 255-char counter"
+      ],
+      "repo": "WicksMacroBuilder"
     }
   ],
   "retired": [

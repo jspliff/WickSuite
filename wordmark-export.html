@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wick's Wordmark — Export</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1625; color: #D4C8A1; font-family: 'Space Mono', monospace; padding: 40px; }
+  h1 { font-family: 'Cinzel', serif; font-weight: 900; font-size: 28px; letter-spacing: -0.02em; margin-bottom: 4px; color: #D4C8A1; }
+  .sub { font-size: 10px; letter-spacing: 0.3em; color: #7A6E58; text-transform: uppercase; margin-bottom: 32px; }
+  .section-label { font-size: 10px; letter-spacing: 0.25em; color: #4FC778; text-transform: uppercase; margin: 32px 0 16px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: #383058; }
+  .tile-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 24px; }
+  .tile { display: flex; flex-direction: column; gap: 8px; }
+  .tile-label { font-size: 9px; letter-spacing: 0.15em; color: #7A6E58; text-transform: uppercase; }
+  .tile-label b { color: #4FC778; }
+  .art { display: flex; align-items: center; justify-content: center; padding: 24px 36px; position: relative; }
+  .bg-void { background: #0D0A14; }
+  .bg-shadow { background: #171124; }
+  .bg-light { background: #D4C8A1; }
+  .bg-green { background: #4FC778; }
+  .bg-transparent { background: repeating-conic-gradient(#2a2530 0% 25%, #1a1625 0% 50%) 50% / 20px 20px; }
+  .stack { display: inline-flex; flex-direction: column; align-items: stretch; }
+  .caps { font-family: 'Space Mono', monospace; color: #4FC778; margin-top: 4px; text-align: right; }
+  .instructions { background: #0D0A14; border: 1px solid #383058; padding: 14px 18px; margin-bottom: 24px; font-size: 12px; line-height: 1.6; color: #D4C8A1; }
+  .instructions b { color: #4FC778; }
+  .hint { font-size: 11px; color: #7A6E58; margin-top: 12px; max-width: 720px; line-height: 1.6; }
+  .hint code { background: #171124; padding: 1px 6px; border: 1px solid #383058; color: #4FC778; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<h1>Wick's — Wordmark Variants</h1>
+<div class="sub">Flame-as-"i" · Cinzel 900 · Logo variants</div>
+
+<div class="instructions">
+  <b>To save as PNG:</b> right-click any <i>.art</i> tile → Inspect → right-click the tile → <b>Capture node screenshot</b>. Good for headers, email signatures, Discord profile images, or GitHub repo headers.
+</div>
+
+<!-- Reusable SVG flame-as-i symbol (tight viewBox) -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="flame-i" viewBox="20 0 40 91">
+      <rect x="38" y="52" width="4" height="36" fill="var(--accent,#4FC778)" opacity="0.5"/>
+      <ellipse cx="40" cy="88" rx="18" ry="5" fill="var(--accent,#4FC778)" opacity="0.15"/>
+      <rect x="22" y="83" width="36" height="8" rx="1" fill="var(--base,#383058)"/>
+      <rect x="22" y="83" width="36" height="8" rx="1" fill="var(--accent,#4FC778)" opacity="0.12"/>
+      <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="var(--accent,#4FC778)" opacity="0.2"/>
+      <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="var(--accent,#4FC778)" opacity="0.5"/>
+      <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="var(--accent,#4FC778)" opacity="0.9"/>
+      <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="var(--letter,#D4C8A1)" opacity="0.85"/>
+      <circle cx="40" cy="52" r="2" fill="var(--accent,#4FC778)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<style>
+  /* Integrated wordmark macro — reuse everywhere.
+     Glyph height 1.08em = slightly taller than caps, giving it more weight than the W.
+     Vertical-align -0.05em drops the flame by 5% of font-size.
+     Margin -0.06em tightens the overlap between flame and adjacent letters.
+     Drop-shadow gives foreground-depth lift.
+     All units in em so it scales with any font-size automatically. */
+  .wm {
+    font-family: 'Cinzel', serif; font-weight: 900;
+    letter-spacing: -0.04em; line-height: 1;
+    white-space: nowrap;
+    position: relative;
+  }
+  .wm svg {
+    height: 1.08em; width: auto;
+    vertical-align: -0.05em;
+    margin: 0 -0.06em;
+    position: relative; z-index: 2;
+    filter:
+      drop-shadow(0 0.025em 0.05em rgba(0,0,0,0.55))
+      drop-shadow(0 0 0.08em rgba(79,199,120,0.35));
+  }
+</style>
+
+<!-- ────────────────────────────────────────────
+     Sizes — Wick's wordmark at multiple scales
+──────────────────────────────────────────── -->
+<div class="section-label">Sizes · Wick's (flame-as-i)</div>
+
+<div class="tile-row">
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:96px;color:#D4C8A1;">W<svg width="40" height="88" style="margin-bottom:-4px"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">96px · hero / banner</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:64px;color:#D4C8A1;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">64px · sub-hero</div>
+  </div>
+</div>
+
+<div class="tile-row">
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:48px;color:#D4C8A1;">W<svg width="20" height="44"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">48px · page header</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:32px;color:#D4C8A1;">W<svg width="14" height="30"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">32px · UI title</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:20px;color:#D4C8A1;">W<svg width="9" height="18"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">20px · body inline</div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────
+     Background variants
+──────────────────────────────────────────── -->
+<div class="section-label">Backgrounds · 64px reference size</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:64px;color:#D4C8A1;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">Void bg (#0D0A14) — default</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-shadow">
+      <span class="wm" style="font-size:64px;color:#D4C8A1;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">Shadow bg (#171124)</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-transparent">
+      <span class="wm" style="font-size:64px;color:#D4C8A1;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">Transparent (checkerboard)</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-light">
+      <span class="wm" style="font-size:64px;color:#0D0A14;--letter:#0D0A14;--base:#0D0A14;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">Light bg · inverted</div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────
+     With SUITE descriptor stacked
+──────────────────────────────────────────── -->
+<div class="section-label">Stacked lockup · Wick's over SUITE</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="art bg-void">
+      <div class="stack">
+        <span class="wm" style="font-size:64px;color:#D4C8A1;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+        <div class="caps" style="font-size:11px;letter-spacing:0.5em;">SUITE</div>
+      </div>
+    </div>
+    <div class="tile-label"><b>Suite</b> brand lockup · 64px</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <div class="stack">
+        <span class="wm" style="font-size:44px;color:#D4C8A1;">W<svg width="18" height="40"><use href="#flame-i"/></svg>ck's</span>
+        <div class="caps" style="font-size:8px;letter-spacing:0.45em;">BIS TRACKER</div>
+      </div>
+    </div>
+    <div class="tile-label"><b>BIS</b> lockup</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <div class="stack">
+        <span class="wm" style="font-size:44px;color:#D4C8A1;">W<svg width="18" height="40"><use href="#flame-i"/></svg>ck's</span>
+        <div class="caps" style="font-size:8px;letter-spacing:0.45em;">CD TRACKER</div>
+      </div>
+    </div>
+    <div class="tile-label"><b>CD</b> lockup</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <div class="stack">
+        <span class="wm" style="font-size:44px;color:#D4C8A1;">W<svg width="18" height="40"><use href="#flame-i"/></svg>ck's</span>
+        <div class="caps" style="font-size:8px;letter-spacing:0.45em;">TRADE HALL</div>
+      </div>
+    </div>
+    <div class="tile-label"><b>Trade</b> lockup</div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────
+     Monochrome variants — for single-color print
+──────────────────────────────────────────── -->
+<div class="section-label">Monochrome variants · for single-color contexts</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:64px;color:#4FC778;--accent:#4FC778;--letter:#4FC778;--base:#4FC778;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">All fel green</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-void">
+      <span class="wm" style="font-size:64px;color:#D4C8A1;--accent:#D4C8A1;--letter:#D4C8A1;--base:#383058;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">All off-white</div>
+  </div>
+  <div class="tile">
+    <div class="art bg-light">
+      <span class="wm" style="font-size:64px;color:#0D0A14;--accent:#0D0A14;--letter:#0D0A14;--base:#0D0A14;">W<svg width="26" height="58"><use href="#flame-i"/></svg>ck's</span>
+    </div>
+    <div class="tile-label">All black (for light/print)</div>
+  </div>
+</div>
+
+<div class="hint">
+  This is the <b>integrated wordmark</b> — the flame-and-candle logo substitutes for the "i" in <b>Wick's</b>.
+  Use it for headers, email signatures, Discord profiles, or anywhere a textual brand fits better than the square logo.
+  Pair the stacked lockups (Wick's over <code>[ADDON NAME]</code>) as per-addon variants.
+  <br><br>
+  The SVG uses CSS custom properties (<code>--accent</code>, <code>--letter</code>, <code>--base</code>) so recoloring is just a style tweak.
+</div>
+
+</body>
+</html>

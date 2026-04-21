@@ -1,3 +1,5 @@
+<p align="center"><img src="images/wick-banner-suite.png" alt="Wick Suite"></p>
+
 # Wick Suite
 
 > Three precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.

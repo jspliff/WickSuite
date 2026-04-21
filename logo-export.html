@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wick Logo — Export</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1625; color: #D4C8A1; font-family: 'Space Mono', monospace; padding: 40px; }
+  h1 { font-family: 'Cinzel', serif; font-weight: 900; font-size: 28px; letter-spacing: -0.02em; margin-bottom: 4px; color: #D4C8A1; }
+  .sub { font-size: 10px; letter-spacing: 0.3em; color: #7A6E58; text-transform: uppercase; margin-bottom: 32px; }
+  .section-label { font-size: 10px; letter-spacing: 0.25em; color: #4FC778; text-transform: uppercase; margin: 32px 0 12px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: #383058; }
+  .tile-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 24px; }
+  .tile { display: flex; flex-direction: column; gap: 6px; }
+  .tile-label { font-size: 9px; letter-spacing: 0.15em; color: #7A6E58; text-transform: uppercase; }
+  .art { display: flex; align-items: center; justify-content: center; position: relative; }
+  /* Pure logo tile (no wordmark) — for CF avatar */
+  .avatar-void { background: #0D0A14; }
+  .avatar-shadow { background: #171124; }
+  .avatar-transparent { background: repeating-conic-gradient(#2a2530 0% 25%, #1a1625 0% 50%) 50% / 20px 20px; }
+  /* Wordmark tile */
+  .mark-box { background: #0D0A14; padding: 24px 36px; display: flex; align-items: center; gap: 14px; }
+  .wordmark-text { font-family: 'Cinzel', serif; font-weight: 900; color: #D4C8A1; letter-spacing: -0.03em; line-height: 1; }
+  .hint { font-size: 10px; color: #7A6E58; margin-top: 6px; max-width: 520px; line-height: 1.5; }
+  .instructions { background: #0D0A14; border: 1px solid #383058; padding: 14px 18px; margin-bottom: 24px; font-size: 12px; line-height: 1.6; color: #D4C8A1; }
+  .instructions b { color: #4FC778; }
+  .instructions code { background: #171124; padding: 1px 6px; border: 1px solid #383058; color: #4FC778; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<h1>Wick — Logo Export</h1>
+<div class="sub">For CurseForge project avatars, GitHub social previews, and Discord icons</div>
+
+<div class="instructions">
+  <b>To save as a PNG:</b> right-click any tile → <i>Inspect</i> → right-click the tile element → <i>Capture node screenshot</i>. Or use Chrome DevTools device mode.
+  <br><br>
+  <b>CurseForge avatars</b> use 256×256 square PNG. <b>GitHub social preview</b> is 1280×640. <b>Discord icon</b> is 512×512 square.
+</div>
+
+<div class="section-label">CurseForge Avatar · 256 × 256 · pick one background</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="art avatar-void" style="width:256px;height:256px;">
+      <svg width="180" height="216" viewBox="0 0 80 96" fill="none">
+        <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+        <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+        <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+        <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+        <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+        <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+        <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+        <path d="M4 4 L4 16 M4 4 L16 4" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+        <path d="M76 92 L76 80 M76 92 L64 92" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </div>
+    <div class="tile-label">Void bg (#0D0A14) — recommended</div>
+  </div>
+
+  <div class="tile">
+    <div class="art avatar-shadow" style="width:256px;height:256px;">
+      <svg width="180" height="216" viewBox="0 0 80 96" fill="none">
+        <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+        <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+        <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+        <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+        <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+        <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+        <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+        <path d="M4 4 L4 16 M4 4 L16 4" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+        <path d="M76 92 L76 80 M76 92 L64 92" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </div>
+    <div class="tile-label">Shadow bg (#171124)</div>
+  </div>
+
+  <div class="tile">
+    <div class="art avatar-transparent" style="width:256px;height:256px;">
+      <svg width="180" height="216" viewBox="0 0 80 96" fill="none">
+        <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+        <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+        <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+        <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+        <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+        <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+        <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+        <path d="M4 4 L4 16 M4 4 L16 4" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+        <path d="M76 92 L76 80 M76 92 L64 92" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </div>
+    <div class="tile-label">Transparent (checkerboard shown)</div>
+  </div>
+</div>
+
+<div class="section-label">Larger · 512 × 512 (Discord, high-DPI displays)</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="art avatar-void" style="width:512px;height:512px;">
+      <svg width="360" height="432" viewBox="0 0 80 96" fill="none">
+        <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+        <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+        <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+        <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+        <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+        <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+        <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+        <path d="M4 4 L4 16 M4 4 L16 4" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+        <path d="M76 92 L76 80 M76 92 L64 92" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </div>
+    <div class="tile-label">512 × 512 · Void</div>
+  </div>
+</div>
+
+<div class="section-label">Wordmark Lockup · use for GitHub social preview or banner</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="mark-box">
+      <svg width="60" height="72" viewBox="0 0 80 96" fill="none">
+        <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+        <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+        <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+        <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+        <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+        <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+        <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+        <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+      </svg>
+      <span class="wordmark-text" style="font-size:56px;">Wick</span>
+    </div>
+    <div class="tile-label">Full lockup · 56pt wordmark</div>
+  </div>
+</div>
+
+<div class="hint">
+  All art is vector SVG — the source file is <code>logo.svg</code> in this same folder (and a copy in every addon folder).
+  The square Void-bg tile is what I'd upload as the CurseForge avatar for all three projects — consistent across the suite, strongest read at the small sizes CF displays.
+</div>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wick Logo — Per-Addon Variants</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1625; color: #D4C8A1; font-family: 'Space Mono', monospace; padding: 40px; }
+  h1 { font-family: 'Cinzel', serif; font-weight: 900; font-size: 28px; letter-spacing: -0.02em; margin-bottom: 4px; color: #D4C8A1; }
+  .sub { font-size: 10px; letter-spacing: 0.3em; color: #7A6E58; text-transform: uppercase; margin-bottom: 32px; }
+  .section-label { font-size: 10px; letter-spacing: 0.25em; color: #4FC778; text-transform: uppercase; margin: 32px 0 16px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: #383058; }
+  .tile-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 24px; }
+  .tile { display: flex; flex-direction: column; gap: 8px; }
+  .tile-label { font-size: 9px; letter-spacing: 0.15em; color: #7A6E58; text-transform: uppercase; }
+  .tile-label b { color: #4FC778; }
+  .art { background: #0D0A14; display: flex; align-items: center; justify-content: center; position: relative; }
+  .hint { font-size: 11px; color: #7A6E58; margin-top: 12px; max-width: 720px; line-height: 1.6; }
+  .hint code { background: #171124; padding: 1px 6px; border: 1px solid #383058; color: #4FC778; font-size: 11px; }
+  .instructions { background: #0D0A14; border: 1px solid #383058; padding: 14px 18px; margin-bottom: 24px; font-size: 12px; line-height: 1.6; color: #D4C8A1; }
+  .instructions b { color: #4FC778; }
+</style>
+</head>
+<body>
+
+<h1>Wick — Per-Addon Logo Variants</h1>
+<div class="sub">Monogram labels · Cinzel · top-right corner</div>
+
+<div class="instructions">
+  <b>To save as PNG:</b> right-click any 256×256 tile → <i>Inspect</i> → right-click the tile element → <i>Capture node screenshot</i>. Upload as the CurseForge avatar for that addon.
+</div>
+
+<!-- ────────────────────────────────────────────
+     SVG SYMBOL: base Wick mark (flame + candle + 2 brackets)
+     Monogram goes in a <g> overlay per variant.
+──────────────────────────────────────────── -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="wick-base" viewBox="0 0 80 96">
+      <!-- wick stem -->
+      <rect x="38" y="52" width="4" height="36" fill="#4FC778" opacity="0.5"/>
+      <!-- base / wax pool -->
+      <ellipse cx="40" cy="88" rx="18" ry="5" fill="#4FC778" opacity="0.15"/>
+      <rect x="22" y="83" width="36" height="8" rx="1" fill="#383058"/>
+      <rect x="22" y="83" width="36" height="8" rx="1" fill="#4FC778" opacity="0.12"/>
+      <!-- flame layers -->
+      <path d="M40 8 C40 8, 58 30, 58 50 C58 63.8, 50.1 72, 40 72 C29.9 72, 22 63.8, 22 50 C22 30, 40 8 Z" fill="#4FC778" opacity="0.18"/>
+      <path d="M40 18 C40 18, 52 36, 52 50 C52 59.9, 46.6 66, 40 66 C33.4 66, 28 59.9, 28 50 C28 36, 40 18 Z" fill="#4FC778" opacity="0.35"/>
+      <path d="M40 28 C40 28, 47 40, 47 50 C47 54.9, 43.9 58, 40 58 C36.1 58, 33 54.9, 33 50 C33 40, 40 28 Z" fill="#4FC778" opacity="0.8"/>
+      <path d="M40 36 C40 36, 43.5 43, 43.5 50 C43.5 52.8, 42 54.5, 40 54.5 C38 54.5, 36.5 52.8, 36.5 50 C36.5 43, 40 36 Z" fill="#D4C8A1" opacity="0.7"/>
+      <circle cx="40" cy="52" r="2" fill="#4FC778"/>
+      <!-- bracket: top-left -->
+      <path d="M4 4 L4 16 M4 4 L16 4" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+      <!-- bracket: bottom-right -->
+      <path d="M76 92 L76 80 M76 92 L64 92" stroke="#4FC778" stroke-width="2" stroke-linecap="square"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ────────────────────────────────────────────
+     256 × 256 per-addon variants
+──────────────────────────────────────────── -->
+<div class="section-label">CurseForge Avatars · 256 × 256 · per-addon monogram</div>
+
+<div class="tile-row">
+
+  <!-- Wick's BIS Tracker: "BIS" monogram -->
+  <div class="tile">
+    <div class="art" style="width:256px;height:256px;">
+      <svg width="256" height="256" viewBox="0 0 80 96" preserveAspectRatio="xMidYMid meet">
+        <use href="#wick-base" x="0" y="0" width="80" height="96"/>
+        <!-- BIS monogram top-right -->
+        <g>
+          <text x="75" y="13" text-anchor="end"
+                font-family="Cinzel, serif" font-weight="900" font-size="9"
+                letter-spacing="0.5"
+                fill="#4FC778">BIS</text>
+          <line x1="62" y1="17" x2="75" y2="17" stroke="#4FC778" stroke-width="0.6" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="tile-label"><b>Wick's BIS Tracker</b> · upload this to wicks-tbc-bis-tracker</div>
+  </div>
+
+  <!-- Wick's CD Tracker: "CD" monogram -->
+  <div class="tile">
+    <div class="art" style="width:256px;height:256px;">
+      <svg width="256" height="256" viewBox="0 0 80 96" preserveAspectRatio="xMidYMid meet">
+        <use href="#wick-base" x="0" y="0" width="80" height="96"/>
+        <!-- CD monogram top-right -->
+        <g>
+          <text x="75" y="13" text-anchor="end"
+                font-family="Cinzel, serif" font-weight="900" font-size="9"
+                letter-spacing="0.5"
+                fill="#4FC778">CD</text>
+          <line x1="63" y1="17" x2="75" y2="17" stroke="#4FC778" stroke-width="0.6" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="tile-label"><b>Wick's CD Tracker</b> · upload this to wicks-cd-tracker</div>
+  </div>
+
+  <!-- Wick's Trade Hall: "TH" monogram -->
+  <div class="tile">
+    <div class="art" style="width:256px;height:256px;">
+      <svg width="256" height="256" viewBox="0 0 80 96" preserveAspectRatio="xMidYMid meet">
+        <use href="#wick-base" x="0" y="0" width="80" height="96"/>
+        <!-- TH monogram top-right -->
+        <g>
+          <text x="75" y="13" text-anchor="end"
+                font-family="Cinzel, serif" font-weight="900" font-size="9"
+                letter-spacing="0.5"
+                fill="#4FC778">TH</text>
+          <line x1="63" y1="17" x2="75" y2="17" stroke="#4FC778" stroke-width="0.6" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="tile-label"><b>Wick's Trade Hall</b> · upload this to trade-hall</div>
+  </div>
+
+</div>
+
+<!-- ────────────────────────────────────────────
+     512 × 512 (high-DPI / Discord)
+──────────────────────────────────────────── -->
+<div class="section-label">512 × 512 · same monograms, higher-res</div>
+<div class="tile-row">
+  <div class="tile">
+    <div class="art" style="width:512px;height:512px;">
+      <svg width="512" height="512" viewBox="0 0 80 96" preserveAspectRatio="xMidYMid meet">
+        <use href="#wick-base" x="0" y="0" width="80" height="96"/>
+        <g>
+          <text x="75" y="13" text-anchor="end" font-family="Cinzel, serif" font-weight="900" font-size="9" letter-spacing="0.5" fill="#4FC778">BIS</text>
+          <line x1="62" y1="17" x2="75" y2="17" stroke="#4FC778" stroke-width="0.6" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="tile-label"><b>BIS</b></div>
+  </div>
+  <div class="tile">
+    <div class="art" style="width:512px;height:512px;">
+      <svg width="512" height="512" viewBox="0 0 80 96" preserveAspectRatio="xMidYMid meet">
+        <use href="#wick-base" x="0" y="0" width="80" height="96"/>
+        <g>
+          <text x="75" y="13" text-anchor="end" font-family="Cinzel, serif" font-weight="900" font-size="9" letter-spacing="0.5" fill="#4FC778">CD</text>
+          <line x1="63" y1="17" x2="75" y2="17" stroke="#4FC778" stroke-width="0.6" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="tile-label"><b>CD</b></div>
+  </div>
+  <div class="tile">
+    <div class="art" style="width:512px;height:512px;">
+      <svg width="512" height="512" viewBox="0 0 80 96" preserveAspectRatio="xMidYMid meet">
+        <use href="#wick-base" x="0" y="0" width="80" height="96"/>
+        <g>
+          <text x="75" y="13" text-anchor="end" font-family="Cinzel, serif" font-weight="900" font-size="9" letter-spacing="0.5" fill="#4FC778">TH</text>
+          <line x1="63" y1="17" x2="75" y2="17" stroke="#4FC778" stroke-width="0.6" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="tile-label"><b>TH</b></div>
+  </div>
+</div>
+
+<div class="hint">
+  Monograms are rendered in <b>Cinzel 900</b> (same family as the Wick wordmark) in <code>#4FC778</code> fel green,
+  anchored to the upper-right where the L-bracket is absent. The thin underline gives the letters visual weight without competing with the flame.
+  <br><br>
+  If you want a different monogram string for any addon (e.g., <code>WTH</code> instead of <code>TH</code>, or <code>BIS</code> → <code>BIST</code>), just say so and I'll regenerate.
+</div>
+
+</body>
+</html>

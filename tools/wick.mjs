@@ -49,7 +49,11 @@ function runCapture(cmd, opts = {}) {
   return execSync(cmd, { encoding: "utf8", shell: true, ...opts }).trim();
 }
 function gitIn(dir, ...args) {
-  return spawnSync("git", args, { cwd: dir, stdio: "inherit", shell: true });
+  const r = spawnSync("git", args, { cwd: dir, stdio: "inherit" });
+  if (r.status !== 0) {
+    die(`git ${args.join(" ")} failed (exit ${r.status}) in ${dir}`);
+  }
+  return r;
 }
 
 // Substitute {{TOKEN}} placeholders in a string.

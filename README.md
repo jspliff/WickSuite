@@ -38,4 +38,7 @@ Web design uses Cinzel (display) / Space Grotesk (UI) / Space Mono (labels). In-
 
 ## License
 
-See individual addon repos for per-addon licenses.
+- **Code and docs:** MIT — see [`LICENSE`](LICENSE).
+- **Brand assets (name, logomark, wordmark, visual system):** trademark-protected — see [`TRADEMARK.md`](TRADEMARK.md) for what you may and may not do with them.
+
+TL;DR: fork the code freely, don't ship your fork as "Wick's" anything.

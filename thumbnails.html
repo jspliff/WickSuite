@@ -429,17 +429,21 @@ function SuiteThumb() {
         </div>
       </div>
       <div style={{position:'absolute',right:14,top:14,bottom:14,left:186,perspective:800}}>
-        {/* Three real-screenshot cards cascaded */}
-        <div style={{position:'absolute',top:4,right:-4,width:'94%',height:78,
+        {/* Four real-screenshot cards cascaded */}
+        <div style={{position:'absolute',top:4,right:-4,width:'94%',height:72,
           transform:'rotate(2deg)',transformOrigin:'top right',zIndex:1}}>
           <Shot which="cd" size="cover" origin="center"/>
         </div>
-        <div style={{position:'absolute',top:56,right:4,left:4,height:78,zIndex:2,
+        <div style={{position:'absolute',top:56,right:4,left:4,height:72,zIndex:2,
           transform:'rotate(-1deg)',transformOrigin:'top left'}}>
           <Shot which="bis" size="cover" origin="left top" accent={QC.epic}/>
         </div>
-        <div style={{position:'absolute',top:108,right:-2,left:10,height:78,zIndex:3}}>
+        <div style={{position:'absolute',top:108,right:-2,left:10,height:72,zIndex:3}}>
           <Shot which="trade" size="cover" origin="left top" accent='#f59e0b'/>
+        </div>
+        <div style={{position:'absolute',top:160,right:-6,left:4,height:72,zIndex:4,
+          transform:'rotate(1deg)',transformOrigin:'top right'}}>
+          <Shot which="macro" size="cover" origin="center" accent={G}/>
         </div>
       </div>
       <Brackets size={12} thick={2}/>

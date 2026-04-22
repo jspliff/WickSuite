@@ -288,16 +288,22 @@ async function cmdRelease(folder, newVer) {
   ok(`${folder}.toc : ${oldVer} → ${newVer}`);
 
   // ── Append CHANGELOG entry (stub — user edits after) ───────────────
+  // Skip the append if an entry for this version already exists (re-release
+  // or the user pre-wrote real notes before running `wick release`).
   const changelog = path.join(dir, "CHANGELOG.md");
   if (fs.existsSync(changelog)) {
     const date = new Date().toISOString().slice(0, 10);
-    const head = `# ${addon.title} — Changelog\n\n## ${newVer} — ${date}\n\n- (edit this entry with the actual changes)\n\n`;
     const existing = fs.readFileSync(changelog, "utf8");
-    const body = existing.startsWith(`# ${addon.title}`)
-      ? existing.replace(/^(# [^\n]+\n\n)/, `$1## ${newVer} — ${date}\n\n- (edit this entry with the actual changes)\n\n`)
-      : head + existing;
-    fs.writeFileSync(changelog, body);
-    ok(`CHANGELOG.md: appended ${newVer}`);
+    if (new RegExp(`^##\\s+${newVer.replace(/\./g, "\\.")}\\b`, "m").test(existing)) {
+      log(`  CHANGELOG.md already has a ${newVer} entry — leaving it as-is`);
+    } else {
+      const head = `# ${addon.title} — Changelog\n\n## ${newVer} — ${date}\n\n- (edit this entry with the actual changes)\n\n`;
+      const body = existing.startsWith(`# ${addon.title}`)
+        ? existing.replace(/^(# [^\n]+\n\n)/, `$1## ${newVer} — ${date}\n\n- (edit this entry with the actual changes)\n\n`)
+        : head + existing;
+      fs.writeFileSync(changelog, body);
+      ok(`CHANGELOG.md: appended ${newVer}`);
+    }
   }
 
   // ── Commit + tag + push ───────────────────────────────────────────
@@ -319,6 +325,9 @@ async function cmdRelease(folder, newVer) {
   ok(`zip: ${zipName}`);
 
   // ── Upload to CurseForge ─────────────────────────────────────────
+  // Write metadata to a temp JSON file and use curl's `-F metadata=<file`
+  // reader. Avoids cross-shell single-quote hell (cmd.exe / bash / ps) that
+  // would otherwise split the JSON on spaces and lose the metadata field.
   log(`\nUploading to CurseForge project ${addon.cf_project_id} ...`);
   const metadata = JSON.stringify({
     gameVersions: [config.cf_game_version_id],
@@ -327,15 +336,23 @@ async function cmdRelease(folder, newVer) {
     changelogType: "markdown",
     displayName: `${addon.title} v${newVer}`,
   });
+  const metaPath = path.join(config.addons_root_local, `.wick-cf-meta-${folder}.json`);
+  fs.writeFileSync(metaPath, metadata);
   const uploadCmd = [
     `curl -s -X POST`,
     `-H "X-Api-Token: ${token}"`,
-    `-F 'metadata=${metadata.replace(/'/g, "'\\''")}'`,
+    `-F "metadata=<${metaPath}"`,
     `-F "file=@${zipPath}"`,
     `"${config.cf_api_base}/api/projects/${addon.cf_project_id}/upload-file"`,
   ].join(" ");
-  const resp = runCapture(uploadCmd);
+  let resp = runCapture(uploadCmd);
+  try { fs.rmSync(metaPath); } catch (_) {}
   log(resp);
+  let parsed = null;
+  try { parsed = JSON.parse(resp); } catch (_) {}
+  if (parsed && parsed.errorCode) {
+    die(`CurseForge upload failed (${parsed.errorCode}): ${parsed.errorMessage || "unknown error"}`);
+  }
   ok(`CurseForge: uploaded v${newVer}`);
 
   log(`\n✓ Release complete.`);

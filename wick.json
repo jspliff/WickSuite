@@ -71,7 +71,7 @@
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-macro-builder",
-      "cf_project_id": null,
+      "cf_project_id": 1521208,
       "features": [
         "Conditional + command chips",
         "9-class preset library",

@@ -67,7 +67,7 @@
       "title": "Wick's Macro Builder",
       "short": "Macro Builder",
       "slash": "/wsmb",
-      "tagline": "Clean macro editor with conditional chips, command shortcuts, and curated class presets for all 9 classes.",
+      "tagline": "Clean macro editor for TBC Classic. Click-to-insert chips, drag macros straight onto your action bars, curated presets for all 9 classes.",
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-macro-builder",

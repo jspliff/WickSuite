@@ -431,52 +431,65 @@ function CombatLogThumb() {
   );
 }
 
+// Suite addon roster — single source of truth for SuiteThumb + SuiteBanner.
+// Add a new addon here and both artboards update automatically.
+// `icon` maps to design-handoff/images/wick-logo-{icon}-{256,512}.png filenames.
+const SUITE_ADDONS = [
+  { key:'bis',    icon:'bis',   name:'TBC BIS Tracker', mono:'BIS', accent:G, slash:'/wtbt', tag:'best-in-slot tracker' },
+  { key:'cd',     icon:'cd',    name:'CD Tracker',      mono:'CD',  accent:G, slash:'/wcdt', tag:'live cooldowns' },
+  { key:'trade',  icon:'th',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',  tag:'trade chat board' },
+  { key:'macro',  icon:'macro', name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb', tag:'macro editor' },
+  { key:'combat', icon:'cl',    name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',  tag:'CLEU viewer' },
+];
+
 function SuiteThumb() {
   return (
     <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
-      <DungeonBg width={460} height={260} glowX="35%" glowY="50%" glowColor={G} accent="#6B21A8" opacity={0.2}/>
-      <div style={{position:'absolute',left:'35%',top:'50%',transform:'translate(-50%,-50%)',
-        width:220,height:220,borderRadius:'50%',
-        background:`radial-gradient(circle,${G}14 0%,transparent 65%)`,pointerEvents:'none'}}/>
-      <div style={{position:'absolute',left:24,top:0,bottom:0,width:150,display:'flex',flexDirection:'column',justifyContent:'center',gap:6}}>
+      <DungeonBg width={460} height={260} glowX="35%" glowY="55%" glowColor={G} accent="#6B21A8" opacity={0.18}/>
+      {/* Left hero column */}
+      <div style={{position:'absolute',left:22,top:0,bottom:0,width:140,
+        display:'flex',flexDirection:'column',justifyContent:'center',gap:8}}>
         <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch',gap:2}}>
-          <WickWordmark size={38}/>
+          <WickWordmark size={34}/>
           <div style={{fontFamily:FM,fontSize:8,letterSpacing:'0.45em',color:G,marginTop:2,textAlign:'right'}}>SUITE</div>
         </div>
-        <div style={{height:1,background:BR,width:120,margin:'4px 0',position:'relative'}}>
+        <div style={{height:1,background:BR,width:110,margin:'4px 0',position:'relative'}}>
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:4,height:4,background:G,borderRadius:'50%'}}/>
         </div>
-        <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6,marginBottom:6}}>Four precision addons for serious TBC raiders.</div>
-        {['BIS Tracker','CD Tracker','Trade Hall','Macro Builder'].map((n)=>(
-          <div key={n} style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
-            <div style={{width:3,height:3,borderRadius:'50%',background:G,opacity:0.7}}/>
-            <span style={{fontFamily:FD,fontSize:9,color:TX}}><span style={{color:G}}>Wick's</span> {n}</span>
-          </div>
-        ))}
-        <div style={{marginTop:6,display:'flex',flexDirection:'column',gap:3}}>
-          {['TBC Classic','v2.5.5','Open Source'].map(t=>(
+        <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6}}>
+          Five precision addons.<br/>One palette. One voice.
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:6}}>
+          {['TBC Classic','v2.5.5','MIT'].map(t=>(
             <span key={t} style={{fontFamily:FM,fontSize:6.5,color:G,border:`1px solid ${G}`,
               padding:'1px 6px',opacity:0.55,alignSelf:'flex-start',letterSpacing:'0.1em'}}>{t}</span>
           ))}
         </div>
       </div>
-      <div style={{position:'absolute',right:14,top:14,bottom:14,left:186,perspective:800}}>
-        {/* Four real-screenshot cards cascaded */}
-        <div style={{position:'absolute',top:4,right:-4,width:'94%',height:72,
-          transform:'rotate(2deg)',transformOrigin:'top right',zIndex:1}}>
-          <Shot which="cd" size="cover" origin="center"/>
-        </div>
-        <div style={{position:'absolute',top:56,right:4,left:4,height:72,zIndex:2,
-          transform:'rotate(-1deg)',transformOrigin:'top left'}}>
-          <Shot which="bis" size="cover" origin="left top" accent={QC.epic}/>
-        </div>
-        <div style={{position:'absolute',top:108,right:-2,left:10,height:72,zIndex:3}}>
-          <Shot which="trade" size="cover" origin="left top" accent='#f59e0b'/>
-        </div>
-        <div style={{position:'absolute',top:160,right:-6,left:4,height:72,zIndex:4,
-          transform:'rotate(1deg)',transformOrigin:'top right'}}>
-          <Shot which="macro" size="cover" origin="center" accent={G}/>
-        </div>
+      {/* Right roster — 5 stacked mini-cards, one per addon */}
+      <div style={{position:'absolute',right:14,top:14,bottom:14,left:172,
+        display:'flex',flexDirection:'column',gap:4}}>
+        {SUITE_ADDONS.map(a => (
+          <div key={a.key} style={{flex:1,display:'flex',alignItems:'center',gap:9,
+            background:'rgba(13,10,20,0.55)',border:`1px solid ${BR}`,padding:'0 9px',
+            position:'relative'}}>
+            {/* Accent strip on the left edge */}
+            <div style={{position:'absolute',left:0,top:0,bottom:0,width:2,background:a.accent}}/>
+            {/* Monogram icon */}
+            <img src={`../design-handoff/images/wick-logo-${a.icon}-256.png`}
+              alt={a.mono}
+              style={{width:32,height:32,display:'block',flexShrink:0,
+                imageRendering:'auto'}}/>
+            <div style={{flex:1,display:'flex',flexDirection:'column',gap:1}}>
+              <div style={{fontFamily:FD,fontSize:10,fontWeight:700,color:TX,letterSpacing:'0.01em'}}>
+                <span style={{color:G}}>Wick's</span> {a.name}
+              </div>
+              <div style={{fontFamily:FM,fontSize:6.5,color:MDIM,letterSpacing:'0.12em'}}>
+                {a.slash}<span style={{color:DIM,margin:'0 4px'}}>·</span>{a.tag}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <Brackets size={12} thick={2}/>
     </div>
@@ -484,56 +497,71 @@ function SuiteThumb() {
 }
 
 function SuiteBanner() {
-  const players = [
-    {n:'Arcay',cls:'hunter',ics:['ability_hunter_aimedshot','ability_hunter_aspectmastery']},
-    {n:'Wetstones',cls:'shaman',ics:['spell_nature_bloodlust','ability_shaman_heroism']},
-    {n:'Wickisoholy',cls:'priest',ics:['spell_holy_painsupression','spell_shadow_soulgem']},
-    {n:'Bluesteele',cls:'paladin',ics:['spell_holy_avenginewrath','spell_holy_divineprotection']},
-  ];
-  const bisItems = [
-    {sl:'WEAPON',nm:'Gavel of Pure Light',q:'epic',src:'Rep',icon:'inv_hammer_04',isNew:true},
-    {sl:'CHEST',nm:'Hallowed Garments',q:'epic',src:'Drop',icon:'inv_chest_cloth_49'},
-    {sl:'NECK',nm:'Necklace of Eternal Hope',q:'epic',src:'Badge',icon:'inv_jewelry_necklace_26'},
-  ];
-  const trades = [
-    {cat:'WTB',catC:{b:'#7c2d12',c:'#fb923c'},n:'Ashbane',cls:'warrior',msg:'WTB Nether Vortex 210g ea',icon:'inv_elemental_mote_nether',hl:true},
-    {cat:'WTS',catC:{b:'#991b1b',c:'#f87171'},n:'Dscimitar',cls:'rogue',msg:'selling vengeance wrap',hl:false},
-    {cat:'ENCH',catC:{b:'#166534',c:'#4ade80'},n:'Riotpunch',cls:'mage',msg:'LFW Mongoose 3g tip',hl:false},
-  ];
   return (
     <div style={{width:860,height:320,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
       <DungeonBg width={860} height={320} glowX="50%" glowY="50%" glowColor={G} accent="#6B21A8" opacity={0.15}/>
       <Brackets size={14} thick={2}/>
-      <div style={{position:'absolute',left:48,top:0,bottom:0,width:200,display:'flex',flexDirection:'column',justifyContent:'center',gap:4}}>
-        <div style={{fontFamily:FM,fontSize:7.5,letterSpacing:'0.25em',color:MDIM,marginBottom:8}}>WORLD OF WARCRAFT · TBC CLASSIC</div>
-        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch',marginBottom:12}}>
-          <WickWordmark size={52}/>
-          <div style={{fontFamily:FM,fontSize:9,letterSpacing:'0.5em',color:G,marginTop:3,textAlign:'right'}}>SUITE</div>
+      {/* Left hero column */}
+      <div style={{position:'absolute',left:48,top:0,bottom:0,width:248,
+        display:'flex',flexDirection:'column',justifyContent:'center',gap:6}}>
+        <div style={{fontFamily:FM,fontSize:7.5,letterSpacing:'0.28em',color:MDIM,marginBottom:8}}>
+          WORLD OF WARCRAFT · TBC CLASSIC
         </div>
-        <div style={{height:1,background:BR,width:155,margin:'4px 0',position:'relative'}}>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch',marginBottom:14}}>
+          <WickWordmark size={56}/>
+          <div style={{fontFamily:FM,fontSize:10,letterSpacing:'0.5em',color:G,marginTop:3,textAlign:'right'}}>SUITE</div>
+        </div>
+        <div style={{height:1,background:BR,width:170,margin:'4px 0',position:'relative'}}>
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:4,height:4,background:G,borderRadius:'50%'}}/>
         </div>
-        <div style={{fontFamily:FU,fontSize:9.5,color:MDIM,lineHeight:1.6,marginBottom:10,maxWidth:185}}>Four precision addons for serious TBC raiders.</div>
-        {['BIS Tracker','CD Tracker','Trade Hall','Macro Builder'].map(n=>(
-          <div key={n} style={{display:'flex',alignItems:'center',gap:6,marginBottom:3}}>
-            <div style={{width:3,height:3,borderRadius:'50%',background:G,opacity:0.7}}/>
-            <span style={{fontFamily:FD,fontSize:9,color:TX}}><span style={{color:G}}>Wick's</span> {n}</span>
+        <div style={{fontFamily:FU,fontSize:11,color:TX,lineHeight:1.5,marginBottom:8,maxWidth:220,fontWeight:500}}>
+          Five precision addons.<br/>One palette. One voice.
+        </div>
+        <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6,maxWidth:220}}>
+          Built for serious TBC Classic raiders.
+        </div>
+      </div>
+      {/* Vertical divider */}
+      <div style={{position:'absolute',left:316,top:30,bottom:50,width:1,background:BR}}/>
+      {/* Right card strip — 5 monogram cards, one per addon */}
+      <div style={{position:'absolute',left:332,right:18,top:24,bottom:50,
+        display:'flex',gap:8}}>
+        {SUITE_ADDONS.map(a => (
+          <div key={a.key} style={{flex:1,display:'flex',flexDirection:'column',
+            background:'rgba(13,10,20,0.5)',
+            border:`1px solid ${BR}`,
+            position:'relative',padding:'12px 10px 14px'}}>
+            {/* Top accent strip */}
+            <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:a.accent}}/>
+            {/* Monogram icon */}
+            <img src={`../design-handoff/images/wick-logo-${a.icon}-512.png`}
+              alt={a.mono}
+              style={{width:'100%',aspectRatio:1,marginBottom:10,display:'block',
+                imageRendering:'auto'}}/>
+            {/* Name */}
+            <div style={{fontFamily:FD,fontWeight:700,fontSize:10,color:TX,
+              textAlign:'center',lineHeight:1.25,minHeight:24}}>
+              <span style={{color:G}}>Wick's</span><br/>
+              {a.name}
+            </div>
+            {/* Slash */}
+            <div style={{fontFamily:FM,fontSize:7,color:a.accent,
+              textAlign:'center',marginTop:4,letterSpacing:'0.1em'}}>
+              {a.slash}
+            </div>
           </div>
         ))}
       </div>
-      <div style={{position:'absolute',left:264,top:26,bottom:26,width:1,background:BR}}/>
-      <div style={{position:'absolute',left:280,right:18,top:14,bottom:28,display:'grid',gridTemplateColumns:'1fr 1fr',gridTemplateRows:'1fr 1fr',gap:8}}>
-        <Shot which="cd" size="cover" origin="center" glowAt="70% 70%"/>
-        <Shot which="bis" size="cover" origin="left top" accent={QC.epic} glowAt="20% 40%"/>
-        <Shot which="trade" size="cover" origin="left top" accent='#f59e0b' glowAt="15% 50%"/>
-        <Shot which="macro" size="cover" origin="center" glowAt="30% 40%"/>
-      </div>
-      <div style={{position:'absolute',bottom:0,left:0,right:0,height:22,borderTop:`1px solid ${BR}44`,background:'rgba(13,10,20,0.7)',
+      {/* Footer strip */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,height:32,
+        borderTop:`1px solid ${BR}44`,background:'rgba(13,10,20,0.7)',
         display:'flex',alignItems:'center',paddingLeft:48,paddingRight:20,justifyContent:'space-between'}}>
-        <span style={{fontFamily:FM,fontSize:7,color:DIM,letterSpacing:'0.1em'}}>Wick · TBC Classic</span>
+        <span style={{fontFamily:FM,fontSize:7.5,color:DIM,letterSpacing:'0.12em'}}>
+          Wick · TBC Classic · MIT licensed code · Trademark protected brand
+        </span>
         <div style={{display:'flex',gap:6}}>
           {['TBC Classic','v2.5.5','Open Source'].map(t=>(
-            <span key={t} style={{fontFamily:FM,fontSize:6.5,color:G,border:`1px solid ${G}`,padding:'1px 4px',opacity:0.55}}>{t}</span>
+            <span key={t} style={{fontFamily:FM,fontSize:6.5,color:G,border:`1px solid ${G}`,padding:'1px 6px',opacity:0.55,letterSpacing:'0.1em'}}>{t}</span>
           ))}
         </div>
       </div>

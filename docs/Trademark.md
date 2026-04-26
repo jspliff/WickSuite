@@ -26,4 +26,4 @@ The MIT license on the code does NOT grant rights to these brand assets.
 4. Drop the fel-green + void palette combo, or change the accent substantially.
 5. Cite the fork origin in your README (MIT attribution).
 
-Full policy: [TRADEMARK.md](https://github.com/jspliff/WickSuite/blob/main/TRADEMARK.md) on the repo.
+Full policy: [TRADEMARK.md](https://github.com/Wicksmods/WickSuite/blob/main/TRADEMARK.md) on the repo.

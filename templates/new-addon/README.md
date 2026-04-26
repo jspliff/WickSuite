@@ -4,7 +4,7 @@
 
 > {{TAGLINE}}
 
-Part of the **[Wick suite](https://github.com/jspliff/WickSuite)** — precision TBC Classic addons with a shared fel-green-on-deep-purple aesthetic.
+Part of the **[Wick suite](https://github.com/Wicksmods/WickSuite)** — precision TBC Classic addons with a shared fel-green-on-deep-purple aesthetic.
 
 ## Features
 
@@ -13,7 +13,7 @@ Part of the **[Wick suite](https://github.com/jspliff/WickSuite)** — precision
 ## Install
 
 - **CurseForge:** [curseforge.com/wow/addons/{{CF_SLUG}}](https://www.curseforge.com/wow/addons/{{CF_SLUG}})
-- **Manual:** download the latest ZIP from [Releases](https://github.com/jspliff/{{REPO}}/releases) and extract the `{{FOLDER}}` folder into `World of Warcraft\_classic_\Interface\AddOns\`.
+- **Manual:** download the latest ZIP from [Releases](https://github.com/Wicksmods/{{REPO}}/releases) and extract the `{{FOLDER}}` folder into `World of Warcraft\_classic_\Interface\AddOns\`.
 
 ## Usage
 
@@ -36,4 +36,4 @@ Uses the locked Wick palette and 10px/2px fel-green L-bracket chrome. See:
 
 ## License
 
-See `LICENSE` — MIT with a trademark carve-out for the Wick name, logomark, and visual system. Full trademark policy: [WickSuite/TRADEMARK.md](https://github.com/jspliff/WickSuite/blob/main/TRADEMARK.md).
+See `LICENSE` — MIT with a trademark carve-out for the Wick name, logomark, and visual system. Full trademark policy: [WickSuite/TRADEMARK.md](https://github.com/Wicksmods/WickSuite/blob/main/TRADEMARK.md).

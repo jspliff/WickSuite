@@ -30,7 +30,7 @@ If you fork any Wick addon and republish it:
 
 ## Contact
 
-Questions about brand use? Open an issue on [github.com/jspliff/WickSuite](https://github.com/jspliff/WickSuite).
+Questions about brand use? Open an issue on [github.com/Wicksmods/WickSuite](https://github.com/Wicksmods/WickSuite).
 
 ---
 

@@ -54,7 +54,7 @@
       "accent": "#f59e0b",
       "accent_name": "amber",
       "cf_slug": "trade-hall",
-      "cf_project_id": null,
+      "cf_project_id": 1502890,
       "features": [
         "7 categories",
         "Aged-out fade",
@@ -88,7 +88,7 @@
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-combat-log",
-      "cf_project_id": null,
+      "cf_project_id": 1525232,
       "features": [
         "5,000-event ring buffer",
         "Family + source filters",

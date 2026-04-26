@@ -1,6 +1,6 @@
 # Wick Suite
 
-> Three precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
+> Precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
 
 ## The addons
 
@@ -9,6 +9,8 @@
 | **Wick's TBC BIS Tracker** | [install](https://www.curseforge.com/wow/addons/wicks-tbc-bis-tracker) | [repo](https://github.com/jspliff/WickidsTBCBISTracker) · [wiki](https://github.com/jspliff/WickidsTBCBISTracker/wiki) |
 | **Wick's CD Tracker** | [install](https://www.curseforge.com/wow/addons/wicks-cd-tracker) | [repo](https://github.com/jspliff/WicksCDTracker) · [wiki](https://github.com/jspliff/WicksCDTracker/wiki) |
 | **Wick's Trade Hall** | [install](https://www.curseforge.com/wow/addons/trade-hall) | [repo](https://github.com/jspliff/WicksTradeHall) · [wiki](https://github.com/jspliff/WicksTradeHall/wiki) |
+| **Wick's Macro Builder** | [install](https://www.curseforge.com/wow/addons/wicks-macro-builder) | [repo](https://github.com/jspliff/WicksMacroBuilder) · [wiki](https://github.com/jspliff/WicksMacroBuilder/wiki) |
+| **Wick's Combat Log** | *(not yet published)* | [repo](https://github.com/jspliff/WicksCombatLog) · [wiki](https://github.com/jspliff/WicksCombatLog/wiki) |
 
 ## Wiki pages
 

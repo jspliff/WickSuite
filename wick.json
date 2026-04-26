@@ -78,6 +78,23 @@
         "Live 255-char counter"
       ],
       "repo": "WicksMacroBuilder"
+    },
+    {
+      "folder": "WicksCombatLog",
+      "title": "Wick's Combat Log",
+      "short": "Combat Log",
+      "slash": "/wcl",
+      "tagline": "Raw COMBAT_LOG_EVENT_UNFILTERED viewer. Live event list with filters and side-panel raw-arg inspection.",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-combat-log",
+      "cf_project_id": null,
+      "features": [
+        "5,000-event ring buffer",
+        "Family + source filters",
+        "Click-to-inspect raw args"
+      ],
+      "repo": "WicksCombatLog"
     }
   ],
   "retired": [

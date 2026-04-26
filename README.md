@@ -15,6 +15,7 @@ This repo holds the **brand assets** for the Wick addon suite — not a WoW addo
 | **Wick's CD Tracker** | [repo](https://github.com/jspliff/WicksCDTracker) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-cd-tracker) |
 | **Wick's Trade Hall** | [repo](https://github.com/jspliff/WicksTradeHall) | [CurseForge](https://www.curseforge.com/wow/addons/trade-hall) |
 | **Wick's Macro Builder** | [repo](https://github.com/jspliff/WicksMacroBuilder) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-macro-builder) |
+| **Wick's Combat Log** | [repo](https://github.com/jspliff/WicksCombatLog) | [CurseForge](https://www.curseforge.com/wow/addons/wicks-combat-log) |
 <!-- wick:suite-table:end -->
 
 ## Contents

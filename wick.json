@@ -95,6 +95,23 @@
         "Click-to-inspect raw args"
       ],
       "repo": "WicksCombatLog"
+    },
+    {
+      "folder": "WicksStats",
+      "title": "Wick's Stats",
+      "short": "Stats",
+      "slash": "/wstats",
+      "tagline": "Detailed character stat panel docked next to the character frame. Shows everything Blizzard hides.",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-stats",
+      "cf_project_id": 1532082,
+      "features": [
+        "Per-school spell power",
+        "Source-aware tooltips",
+        "Drag-to-scale corner"
+      ],
+      "repo": "WicksStats"
     }
   ],
   "retired": [

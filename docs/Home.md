@@ -10,8 +10,8 @@
 | **Wick's CD Tracker** | [install](https://www.curseforge.com/wow/addons/wicks-cd-tracker) | [repo](https://github.com/Wicksmods/WicksCDTracker) · [wiki](https://github.com/Wicksmods/WicksCDTracker/wiki) |
 | **Wick's Trade Hall** | [install](https://www.curseforge.com/wow/addons/trade-hall) | [repo](https://github.com/Wicksmods/WicksTradeHall) · [wiki](https://github.com/Wicksmods/WicksTradeHall/wiki) |
 | **Wick's Macro Builder** | [install](https://www.curseforge.com/wow/addons/wicks-macro-builder) | [repo](https://github.com/Wicksmods/WicksMacroBuilder) · [wiki](https://github.com/Wicksmods/WicksMacroBuilder/wiki) |
-| **Wick's Combat Log** | *(not yet published)* | [repo](https://github.com/Wicksmods/WicksCombatLog) · [wiki](https://github.com/Wicksmods/WicksCombatLog/wiki) |
-| **Wick's UI** *(ElvUI plugin)* | *(not yet published)* | [repo](https://github.com/Wicksmods/WicksUI) · [wiki](https://github.com/Wicksmods/WicksUI/wiki) |
+| **Wick's Combat Log** | [install](https://www.curseforge.com/wow/addons/wicks-combat-log) | [repo](https://github.com/Wicksmods/WicksCombatLog) · [wiki](https://github.com/Wicksmods/WicksCombatLog/wiki) |
+| **Wick's Stats** | [install](https://www.curseforge.com/wow/addons/wicks-stats) | [repo](https://github.com/Wicksmods/WicksStats) |
 
 ## Wiki pages
 

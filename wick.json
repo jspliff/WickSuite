@@ -89,6 +89,8 @@
       "accent_name": "fel-green",
       "cf_slug": "wicks-combat-log",
       "cf_project_id": 1525232,
+      "key": "combat",
+      "icon": "cl",
       "features": [
         "5,000-event ring buffer",
         "Family + source filters",

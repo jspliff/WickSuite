@@ -213,6 +213,7 @@ const SHOTS = {
   trade:  '../design-handoff/images/screenshots/screenshot-trade-hall.png',
   macro:  '../design-handoff/images/screenshots/screenshot-macro-builder.png',
   combat: '../design-handoff/images/screenshots/screenshot-combat-log.png',
+  stats:  '../design-handoff/images/screenshots/screenshot-stats.png',
 };
 function Shot({ which, style={}, accent=G, size='auto', origin='left top', glowAt='20% 25%' }) {
   return (
@@ -431,6 +432,37 @@ function CombatLogThumb() {
   );
 }
 
+function StatsThumb() {
+  return (
+    <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={460} height={260} glowX="25%" glowY="45%" glowColor={G} accent="#6B21A8" opacity={0.2}/>
+      <div style={{position:'absolute',left:-20,top:'50%',transform:'translateY(-50%)',
+        width:200,height:200,borderRadius:'50%',
+        background:`radial-gradient(circle, ${G}22 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:20,top:18,bottom:18,width:128,
+        display:'flex',flexDirection:'column',justifyContent:'flex-start',gap:10}}>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch'}}>
+          <WickWordmark size={22}/>
+          <div style={{fontFamily:FM,fontSize:7,letterSpacing:'0.3em',color:G,marginTop:2,textAlign:'right'}}>STATS</div>
+        </div>
+        <div style={{height:1,width:'100%',background:BR}}/>
+        <div style={{fontFamily:FU,fontSize:10,color:TX,lineHeight:1.35,fontWeight:500}}>Every stat,<br/>in one panel.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:'auto'}}>
+          {['Per-school spell power','Source-aware tooltips','Drag-to-scale corner'].map(f=>(
+            <div key={f} style={{display:'flex',alignItems:'center',gap:4}}>
+              <div style={{width:3,height:3,borderRadius:'50%',background:G}}/>
+              <span style={{fontFamily:FM,fontSize:6.5,color:MDIM}}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{position:'absolute',right:14,top:14,bottom:14,left:160}}>
+        <Shot which="stats" size="contain" origin="center" glowAt="50% 35%"/>
+      </div>
+    </div>
+  );
+}
+
 // Suite addon roster — single source of truth for SuiteThumb + SuiteBanner.
 // Add a new addon here and both artboards update automatically.
 // `icon` maps to design-handoff/images/wick-logo-{icon}-{256,512}.png filenames.
@@ -440,6 +472,7 @@ const SUITE_ADDONS = [
   { key:'trade',  icon:'th',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',  tag:'trade chat board' },
   { key:'macro',  icon:'macro', name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb', tag:'macro editor' },
   { key:'combat', icon:'cl',    name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',  tag:'CLEU viewer' },
+  { key:'stats',  icon:'stats', name:'Stats',           mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
 ];
 
 function SuiteThumb() {
@@ -569,6 +602,32 @@ function SuiteBanner() {
   );
 }
 
+function FbCover() {
+  return (
+    <div style={{width:851,height:315,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      {/* Single subtle fel-green halo — centered, soft */}
+      <div style={{position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)',
+        width:640, height:640, borderRadius:'50%', pointerEvents:'none',
+        background:`radial-gradient(circle, ${G}24 0%, ${G}08 30%, transparent 62%)`}}/>
+
+      {/* Wordmark + MODS — flexbox-centered both axes */}
+      <div style={{position:'absolute', inset:0,
+        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+        zIndex:2}}>
+        <WickWordmark size={175}/>
+        <div style={{fontFamily:FD, fontWeight:900, fontSize:38, letterSpacing:'0.42em',
+          color:G, marginTop:6, paddingLeft:'0.42em',
+          textShadow:`0 2px 6px rgba(0,0,0,0.6)`}}>
+          MODS
+        </div>
+      </div>
+
+      {/* Brand brackets — quiet corner mark */}
+      <Brackets size={14} thick={2}/>
+    </div>
+  );
+}
+
 function Artboard({ id, label, w, h, Component }) {
   return (
     <div>
@@ -588,6 +647,8 @@ const ONLY_COMPONENTS = {
   trade:  { Comp: TradeThumb,         w: 460, h: 260 },
   macro:  { Comp: MacroBuilderThumb,  w: 460, h: 260 },
   combat: { Comp: CombatLogThumb,     w: 460, h: 260 },
+  stats:  { Comp: StatsThumb,         w: 460, h: 260 },
+  fbcover: { Comp: FbCover,           w: 851, h: 315 },
 };
 
 function App() {
@@ -639,6 +700,10 @@ function App() {
       <Artboard id="trade-thumb" label="Wick's Trade Hall" w={460} h={260} Component={TradeThumb}/>
       <Artboard id="macro-thumb" label="Wick's Macro Builder" w={460} h={260} Component={MacroBuilderThumb}/>
       <Artboard id="combat-thumb" label="Wick's Combat Log" w={460} h={260} Component={CombatLogThumb}/>
+      <Artboard id="stats-thumb" label="Wick's Stats" w={460} h={260} Component={StatsThumb}/>
+
+      <div className="section-label">Social · Facebook cover (851×315)</div>
+      <Artboard id="fb-cover" label="Wick's Mods — Facebook Cover" w={851} h={315} Component={FbCover}/>
     </>
   );
 }

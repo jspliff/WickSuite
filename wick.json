@@ -10,6 +10,12 @@
   "addons_root_local": "C:\\Program Files (x86)\\World of Warcraft\\_anniversary_\\Interface\\AddOns",
   "project_home": "C:\\Users\\jspli\\Projects\\Wick",
   "suite_repo": "WickSuite",
+  "social": {
+    "fb_page_name": "Wick's Mods",
+    "fb_page_id": "1183968144796759",
+    "fb_graph_version": "v21.0",
+    "fb_app_id": "2736806253352279"
+  },
   "addons": [
     {
       "folder": "WickidsTBCBISTracker",

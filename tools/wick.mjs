@@ -15,6 +15,9 @@
 //   - Node 18+
 //   - gh CLI authenticated (for scaffold's repo creation)
 //   - CURSEFORGE_API_TOKEN env var (for release's CF upload)
+//   - FB_WICKS_MODS_PAGE_TOKEN env var (optional; for the post-release FB announce).
+//     Falls back to deriving from the user token in C:\Users\jspli\OneDrive\Documents\keys.txt.
+//     Pass --no-announce to wick release to skip the FB post.
 
 import { execSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -77,6 +80,194 @@ function deriveSlash(title) {
     .filter(Boolean).join("");
   // Prefix with "w" for Wick
   return "/w" + caps;
+}
+
+// ── FB announce helpers ───────────────────────────────────────────────────
+
+// Resolve a Page Access Token for the configured FB page.
+// Order of resolution:
+//   1. FB_WICKS_MODS_PAGE_TOKEN env var (if set, use directly)
+//   2. Read user token from C:\Users\jspli\OneDrive\Documents\keys.txt FB block,
+//      call /me/accounts via curl, extract the access_token for the configured page id
+// Returns null if neither path works (caller logs and continues).
+function resolveFBPageToken(config) {
+  const fromEnv = process.env.FB_WICKS_MODS_PAGE_TOKEN;
+  if (fromEnv) return fromEnv;
+
+  const keysPath = "C:/Users/jspli/OneDrive/Documents/keys.txt";
+  if (!fs.existsSync(keysPath)) return null;
+  // Normalize CRLF (Windows) so regex anchors and slicing behave predictably.
+  const keys = fs.readFileSync(keysPath, "utf8").replace(/\r/g, "");
+  // Find the FB header and the first long EA-prefixed token after it.
+  // Graph user tokens start with "EA" and are 200+ chars. The next section
+  // headers in the file use simple ALL-CAPS-ish names like "WORKERS" — but
+  // we don't need a hard stop because no other section uses an EA-prefixed
+  // value, so the first EA hit after the FB header is unambiguously the FB
+  // user token.
+  const m = keys.match(/^FB[\s\S]*?(EA[A-Za-z0-9_-]{100,})/m);
+  const userToken = m ? m[1] : null;
+  if (!userToken) return null;
+
+  const v = config.social?.fb_graph_version || "v21.0";
+  const pageId = config.social?.fb_page_id;
+  if (!pageId) return null;
+  let resp;
+  try {
+    resp = runCapture(
+      `curl -s "https://graph.facebook.com/${v}/me/accounts?fields=id,access_token&access_token=${userToken}"`
+    );
+  } catch (_) {
+    return null;
+  }
+  let parsed;
+  try { parsed = JSON.parse(resp); } catch (_) { return null; }
+  const page = (parsed.data || []).find(p => p.id === pageId);
+  return page?.access_token || null;
+}
+
+// Pull the body of a single CHANGELOG version section.
+// Returns the lines between `## VERSION` and the next `## ` header, trimmed.
+function extractChangelogEntry(changelogPath, version) {
+  if (!fs.existsSync(changelogPath)) return "";
+  const body = fs.readFileSync(changelogPath, "utf8").replace(/\r\n/g, "\n");
+  const escVer = version.replace(/\./g, "\\.");
+  // No `m` flag: anchor against `\n##` for boundaries and `$` for end-of-string.
+  // (JS regex has no \A/\Z, and `m` flag turns `$` into end-of-line which would
+  // make the lazy quantifier capture zero chars.)
+  const re = new RegExp(`\\n##\\s+${escVer}\\b[^\\n]*\\n([\\s\\S]*?)(?=\\n##\\s|$)`);
+  const m = body.match(re);
+  if (!m) return "";
+  // Strip the "(edit this entry...)" stub if it's all that's there.
+  const text = m[1].trim();
+  if (/^- \(edit this entry/i.test(text)) return "";
+  return text;
+}
+
+// Find the per-addon thumb PNG in the addon's images/ folder, if present.
+function findAddonThumb(addonDir) {
+  const imgDir = path.join(addonDir, "images");
+  if (!fs.existsSync(imgDir)) return null;
+  const matches = fs.readdirSync(imgDir).filter(f => /^wick-thumb-[a-z0-9-]+\.png$/i.test(f) && !/-2x\.png$/i.test(f));
+  return matches.length ? path.join(imgDir, matches[0]) : null;
+}
+
+// FB doesn't render markdown, so strip the syntax that would otherwise show up
+// as literal characters in the post: headers, link wrappers, code fences, etc.
+function sanitizeMarkdownForFB(s) {
+  return s
+    // Drop H3+ headers entirely (the "### Initial release" line is just clutter
+    // in a release post; the version is already in the lead-in).
+    .replace(/^#{3,6}\s+.*$/gm, "")
+    // [text](url) → text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    // `code` → code (drop the backticks, keep the text)
+    .replace(/`([^`]+)`/g, "$1")
+    // Bold/italic emphasis
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "$1")
+    // Collapse 3+ blank lines that the header strip might leave behind
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+// Compose the FB post caption from addon metadata + changelog body.
+function composeFBCaption(addon, version, changelogBody) {
+  const cfUrl = `https://www.curseforge.com/wow/addons/${addon.cf_slug}`;
+  const lines = [];
+  lines.push(`${addon.title} ${version} is live on CurseForge.`);
+  lines.push("");
+  if (addon.tagline) {
+    lines.push(addon.tagline);
+    lines.push("");
+  }
+  if (changelogBody) {
+    const cleaned = sanitizeMarkdownForFB(changelogBody);
+    if (cleaned) {
+      lines.push("What's new");
+      // Trim to ~1500 chars to keep the post readable; FB allows much more but no one reads it.
+      const trimmed = cleaned.length > 1500
+        ? cleaned.slice(0, 1500).replace(/\s+\S*$/, "") + "..."
+        : cleaned;
+      lines.push(trimmed);
+      lines.push("");
+    }
+  }
+  lines.push(`Download: ${cfUrl}`);
+  return lines.join("\n");
+}
+
+// Post a release announcement to the Wick's Mods FB page. Best-effort:
+// any failure is logged and swallowed — the release itself already succeeded.
+function announceFB(addon, version, addonDir, config) {
+  const marker = path.join(addonDir, `.wick-fb-announced-v${version}`);
+  if (fs.existsSync(marker)) {
+    log(`  (FB: already announced v${version}, skipping — delete ${path.basename(marker)} to re-post)`);
+    return;
+  }
+
+  const token = resolveFBPageToken(config);
+  if (!token) {
+    log(`  (FB: no page token available — set FB_WICKS_MODS_PAGE_TOKEN or fix keys.txt; skipping announce)`);
+    return;
+  }
+  const pageId = config.social?.fb_page_id;
+  const v = config.social?.fb_graph_version || "v21.0";
+  if (!pageId) {
+    log(`  (FB: wick.json missing social.fb_page_id; skipping announce)`);
+    return;
+  }
+
+  const changelog = path.join(addonDir, "CHANGELOG.md");
+  const body = extractChangelogEntry(changelog, version);
+  const caption = composeFBCaption(addon, version, body);
+  const captionPath = path.join(config.addons_root_local, `.wick-fb-caption-${addon.folder}.txt`);
+  fs.writeFileSync(captionPath, caption);
+
+  const thumb = findAddonThumb(addonDir);
+  const cfUrl = `https://www.curseforge.com/wow/addons/${addon.cf_slug}`;
+
+  let cmd, target;
+  if (thumb) {
+    target = `/${pageId}/photos`;
+    cmd = [
+      `curl -s -X POST`,
+      `-F "source=@${thumb}"`,
+      `-F "caption=<${captionPath}"`,
+      `-F "access_token=${token}"`,
+      `"https://graph.facebook.com/${v}${target}"`,
+    ].join(" ");
+  } else {
+    target = `/${pageId}/feed`;
+    cmd = [
+      `curl -s -X POST`,
+      `-F "message=<${captionPath}"`,
+      `-F "link=${cfUrl}"`,
+      `-F "access_token=${token}"`,
+      `"https://graph.facebook.com/${v}${target}"`,
+    ].join(" ");
+  }
+
+  log(`\nPosting to Facebook (${config.social.fb_page_name})${thumb ? " with thumbnail" : ""} ...`);
+  let resp;
+  try { resp = runCapture(cmd); }
+  catch (e) { log(`  (FB: curl failed: ${e.message})`); try { fs.rmSync(captionPath); } catch (_) {} return; }
+  try { fs.rmSync(captionPath); } catch (_) {}
+
+  let parsed = null;
+  try { parsed = JSON.parse(resp); } catch (_) {}
+  if (parsed && parsed.error) {
+    const e = parsed.error;
+    log(`  (FB: post failed: type=${e.type} code=${e.code} subcode=${e.error_subcode || "-"} msg=${e.message})`);
+    if (e.error_user_msg) log(`       user_msg: ${e.error_user_msg}`);
+    if (e.fbtrace_id)     log(`       fbtrace_id: ${e.fbtrace_id}`);
+    return;
+  }
+  if (parsed && (parsed.id || parsed.post_id)) {
+    fs.writeFileSync(marker, `${new Date().toISOString()}\n${JSON.stringify(parsed)}\n`);
+    ok(`FB: posted to ${config.social.fb_page_name} (post id ${parsed.post_id || parsed.id})`);
+    return;
+  }
+  log(`  (FB: unexpected response, raw: ${resp.slice(0, 600)})`);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -264,10 +455,11 @@ function cmdRender() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// release <folder> <version>
+// release <folder> <version> [--no-announce]
 // ═══════════════════════════════════════════════════════════════════════════
-async function cmdRelease(folder, newVer) {
-  if (!folder || !newVer) die("usage: wick release <folder> <version>");
+async function cmdRelease(folder, newVer, ...flags) {
+  if (!folder || !newVer) die("usage: wick release <folder> <version> [--no-announce]");
+  const noAnnounce = flags.includes("--no-announce");
   const config = readConfig();
   const addon = config.addons.find(a => a.folder === folder);
   if (!addon) die(`addon not found in wick.json: ${folder}`);
@@ -355,6 +547,14 @@ async function cmdRelease(folder, newVer) {
   }
   ok(`CurseForge: uploaded v${newVer}`);
 
+  // ── Announce on Facebook (best effort) ───────────────────────────
+  if (noAnnounce) {
+    log(`  (FB: --no-announce passed, skipping post)`);
+  } else {
+    try { announceFB(addon, newVer, dir, config); }
+    catch (e) { log(`  (FB: announce threw, swallowed: ${e.message})`); }
+  }
+
   log(`\n✓ Release complete.`);
   log(`  • Update CHANGELOG.md with real changes (stub inserted)`);
   log(`  • Re-upload Featured image if needed`);
@@ -370,23 +570,41 @@ switch (sub) {
   case "scaffold": cmdScaffold(rest.join(" ")); break;
   case "sync":     cmdSync(); break;
   case "render":   cmdRender(); break;
-  case "release":  await cmdRelease(rest[0], rest[1]); break;
+  case "release":  await cmdRelease(rest[0], rest[1], ...rest.slice(2)); break;
+  case "announce": {
+    // Manually re-post a release announcement (e.g., if --no-announce was used,
+    // or the FB token wasn't set at release time, or you want to re-post).
+    const folder = rest[0], ver = rest[1];
+    if (!folder || !ver) die("usage: wick announce <folder> <version>");
+    const cfg = readConfig();
+    const a = cfg.addons.find(x => x.folder === folder);
+    if (!a) die(`addon not found in wick.json: ${folder}`);
+    const dir = path.join(cfg.addons_root_local, folder);
+    announceFB(a, ver, dir, cfg);
+    break;
+  }
   case undefined:
   case "-h":
   case "--help":
     log(`wick — Wick addon suite CLI
 
 usage:
-  wick list                       list active addons
-  wick scaffold "<Display Name>"  create a new addon (files, git, github, wick.json)
-  wick sync                       regenerate suite cross-link tables in every README
-  wick render                     run grab-artboards.mjs (thumbnails + banner)
-  wick release <folder> <ver>     bump, commit, tag, push, zip, upload to CurseForge
+  wick list                                list active addons
+  wick scaffold "<Display Name>"           create a new addon (files, git, github, wick.json)
+  wick sync                                regenerate suite cross-link tables in every README
+  wick render                              run grab-artboards.mjs (thumbnails + banner)
+  wick release <folder> <ver> [--no-announce]
+                                           bump, commit, tag, push, zip, upload to CurseForge,
+                                           and post a release announcement to Wick's Mods on FB
+  wick announce <folder> <ver>             re-post a release announcement to FB (idempotent;
+                                           writes a marker file to dedupe)
 
 examples:
   node tools/wick.mjs list
   node tools/wick.mjs scaffold "Wick's Aggro Meter"
-  node tools/wick.mjs release WicksCDTracker 0.3.0`);
+  node tools/wick.mjs release WicksCDTracker 0.3.0
+  node tools/wick.mjs release WicksCDTracker 0.3.0 --no-announce
+  node tools/wick.mjs announce WicksQuestKey 1.0.0`);
     break;
   default:
     die(`unknown subcommand: ${sub}\n(try: wick --help)`);

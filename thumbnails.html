@@ -207,14 +207,14 @@ function WickWordmark({ size=38, color=TX, accent=G }) {
    - origin: background-position, e.g. 'left top', 'center', '50% 0%'
 */
 const SHOTS = {
-  cd:       '../design-handoff/images/screenshots/screenshot-cd-tracker.png',
-  bis:      '../design-handoff/images/screenshots/screenshot-bis-tracker.png',
-  bis2:     '../design-handoff/images/screenshots/screenshot-bis-custom-lists.png',
-  trade:    '../design-handoff/images/screenshots/screenshot-trade-hall.png',
-  macro:    '../design-handoff/images/screenshots/screenshot-macro-builder.png',
-  combat:   '../design-handoff/images/screenshots/screenshot-combat-log.png',
-  stats:    '../design-handoff/images/screenshots/screenshot-stats.png',
-  questkey: '../design-handoff/images/screenshots/screenshot-questkey.png',
+  cd:       'images/cd/screenshots/main.png',
+  bis:      'images/bis/screenshots/main.png',
+  bis2:     'images/bis/screenshots/custom-lists.png',
+  trade:    'images/trade/screenshots/main.png',
+  macro:    'images/macro/screenshots/main.png',
+  combat:   'images/combat/screenshots/main.png',
+  stats:    'images/stats/screenshots/main.png',
+  questkey: 'images/questkey/screenshots/main.png',
 };
 function Shot({ which, style={}, accent=G, size='auto', origin='left top', glowAt='20% 25%' }) {
   return (
@@ -497,15 +497,15 @@ function QuestKeyThumb() {
 
 // Suite addon roster — single source of truth for SuiteThumb + SuiteBanner.
 // Add a new addon here and both artboards update automatically.
-// `icon` maps to design-handoff/images/wick-logo-{icon}-{256,512}.png filenames.
+// `key` is the per-addon folder under WickSuite/images/ holding logo + thumb files.
 const SUITE_ADDONS = [
-  { key:'bis',      icon:'bis',   name:'TBC BIS Tracker', mono:'BIS', accent:G, slash:'/wtbt',   tag:'best-in-slot tracker' },
-  { key:'cd',       icon:'cd',    name:'CD Tracker',      mono:'CD',  accent:G, slash:'/wcdt',   tag:'live cooldowns' },
-  { key:'trade',    icon:'th',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',    tag:'trade chat board' },
-  { key:'macro',    icon:'macro', name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb',   tag:'macro editor' },
-  { key:'combat',   icon:'cl',    name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',    tag:'CLEU viewer' },
-  { key:'stats',    icon:'stats', name:'Stats',           mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
-  { key:'questkey', icon:'qk',    name:'Quest Key',       mono:'QK',  accent:G, slash:'/wqk',    tag:'one key for quest items' },
+  { key:'bis',      name:'TBC BIS Tracker', mono:'BIS', accent:G, slash:'/wtbt',   tag:'best-in-slot tracker' },
+  { key:'cd',       name:'CD Tracker',      mono:'CD',  accent:G, slash:'/wcdt',   tag:'live cooldowns' },
+  { key:'trade',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',    tag:'trade chat board' },
+  { key:'macro',    name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb',   tag:'macro editor' },
+  { key:'combat',   name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',    tag:'CLEU viewer' },
+  { key:'stats',    name:'Stats',           mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
+  { key:'questkey', name:'Quest Key',       mono:'QK',  accent:G, slash:'/wqk',    tag:'one key for quest items' },
 ];
 
 function SuiteThumb() {
@@ -523,7 +523,7 @@ function SuiteThumb() {
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:4,height:4,background:G,borderRadius:'50%'}}/>
         </div>
         <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6}}>
-          Five precision addons.<br/>One palette. One voice.
+          Seven precision addons.<br/>One palette. One voice.
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:6}}>
           {['TBC Classic','v2.5.5','MIT'].map(t=>(
@@ -532,19 +532,19 @@ function SuiteThumb() {
           ))}
         </div>
       </div>
-      {/* Right roster — 5 stacked mini-cards, one per addon */}
-      <div style={{position:'absolute',right:14,top:14,bottom:14,left:172,
-        display:'flex',flexDirection:'column',gap:4}}>
+      {/* Right roster — 7 stacked mini-cards, one per addon */}
+      <div style={{position:'absolute',right:14,top:10,bottom:10,left:172,
+        display:'flex',flexDirection:'column',gap:3}}>
         {SUITE_ADDONS.map(a => (
-          <div key={a.key} style={{flex:1,display:'flex',alignItems:'center',gap:9,
-            background:'rgba(13,10,20,0.55)',border:`1px solid ${BR}`,padding:'0 9px',
+          <div key={a.key} style={{flex:1,minHeight:0,display:'flex',alignItems:'center',gap:8,
+            background:'rgba(13,10,20,0.55)',border:`1px solid ${BR}`,padding:'0 8px',
             position:'relative'}}>
             {/* Accent strip on the left edge */}
             <div style={{position:'absolute',left:0,top:0,bottom:0,width:2,background:a.accent}}/>
             {/* Monogram icon */}
-            <img src={`../design-handoff/images/wick-logo-${a.icon}-256.png`}
+            <img src={`images/${a.key}/logo-256.png`}
               alt={a.mono}
-              style={{width:32,height:32,display:'block',flexShrink:0,
+              style={{width:24,height:24,display:'block',flexShrink:0,
                 imageRendering:'auto'}}/>
             <div style={{flex:1,display:'flex',flexDirection:'column',gap:1}}>
               <div style={{fontFamily:FD,fontSize:10,fontWeight:700,color:TX,letterSpacing:'0.01em'}}>
@@ -562,10 +562,10 @@ function SuiteThumb() {
   );
 }
 
-function SuiteBanner() {
+function SuiteBanner({ w = 860, h = 320 } = {}) {
   return (
-    <div style={{width:860,height:320,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
-      <DungeonBg width={860} height={320} glowX="50%" glowY="50%" glowColor={G} accent="#6B21A8" opacity={0.15}/>
+    <div style={{width:w,height:h,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={w} height={h} glowX="50%" glowY="50%" glowColor={G} accent="#6B21A8" opacity={0.15}/>
       <Brackets size={14} thick={2}/>
       {/* Left hero column */}
       <div style={{position:'absolute',left:48,top:0,bottom:0,width:248,
@@ -581,7 +581,7 @@ function SuiteBanner() {
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:4,height:4,background:G,borderRadius:'50%'}}/>
         </div>
         <div style={{fontFamily:FU,fontSize:11,color:TX,lineHeight:1.5,marginBottom:8,maxWidth:220,fontWeight:500}}>
-          Five precision addons.<br/>One palette. One voice.
+          Seven precision addons.<br/>One palette. One voice.
         </div>
         <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6,maxWidth:220}}>
           Built for serious TBC Classic raiders.
@@ -600,7 +600,7 @@ function SuiteBanner() {
             {/* Top accent strip */}
             <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:a.accent}}/>
             {/* Monogram icon */}
-            <img src={`../design-handoff/images/wick-logo-${a.icon}-512.png`}
+            <img src={`images/${a.key}/logo-512.png`}
               alt={a.mono}
               style={{width:'100%',aspectRatio:1,marginBottom:10,display:'block',
                 imageRendering:'auto'}}/>
@@ -673,8 +673,10 @@ function Artboard({ id, label, w, h, Component }) {
 // Render-only mode: ?only=banner|suite|cd|bis|trade renders a single artboard at its native
 // size with zero body chrome. Used for headless Chrome screenshot export.
 const ONLY_COMPONENTS = {
-  banner:   { Comp: SuiteBanner,        w: 860, h: 320 },
-  suite:    { Comp: SuiteThumb,         w: 460, h: 260 },
+  banner:   { Comp: SuiteBanner,                            w: 860,  h: 320 },
+  banner850:{ Comp: () => <SuiteBanner w={850}  h={316}/>,  w: 850,  h: 316 },
+  social:   { Comp: () => <SuiteBanner w={1200} h={630}/>,  w: 1200, h: 630 },
+  suite:    { Comp: SuiteThumb,                             w: 460,  h: 260 },
   cd:       { Comp: CDThumb,            w: 460, h: 260 },
   bis:      { Comp: BISThumb,           w: 460, h: 260 },
   trade:    { Comp: TradeThumb,         w: 460, h: 260 },

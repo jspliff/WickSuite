@@ -1,8 +1,8 @@
-<p align="center"><img src="images/wick-banner-suite.png" alt="Wick Suite"></p>
+<p align="center"><img src="images/suite/banner.png" alt="Wick Suite"></p>
 
 # Wick Suite
 
-> Three precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
+> Seven precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
 
 This repo holds the **brand assets** for the Wick addon suite — not a WoW addon itself. Drop it in your `AddOns` directory if you like (WoW ignores folders without a `.toc`), or keep it anywhere else.
 

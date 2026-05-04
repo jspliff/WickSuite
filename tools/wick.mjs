@@ -395,7 +395,8 @@ function cmdScaffold(rawTitle) {
 
   log(`\n✓ Done. Next steps:`);
   log(`   1. Edit ${folder}/Core.lua and ${folder}/UI.lua to implement your addon`);
-  log(`   2. Take in-game screenshots — save to design-handoff/images/screenshot-${slug}.png`);
+  log(`   2. Take in-game screenshots — save to WickSuite/images/{short-key}/screenshots/main.png`);
+  log(`      (pick a short key like bis, cd, macro — same one you'll use in SUITE_ADDONS)`);
   log(`   3. Add a Shot entry to WickSuite/thumbnails.html (component + artboard)`);
   log(`   4. 'wick sync' to regenerate cross-link tables`);
   log(`   5. 'wick render' to generate thumbnails + banner`);

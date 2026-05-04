@@ -56,7 +56,8 @@ wick scaffold "Wick's Aggro Meter"
 
 # 2. Edit Core.lua / UI.lua to implement the addon
 
-# 3. Take in-game screenshots → save to design-handoff/images/screenshot-aggro-meter.png
+# 3. Take in-game screenshots → save to WickSuite/images/aggro/screenshots/main.png
+#    (raw dumps go to design-handoff/images/Screenshots/, then curate into per-addon folder)
 
 # 4. Add a <Shot which="aggro"> entry to WickSuite/thumbnails.html
 

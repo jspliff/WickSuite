@@ -1,4 +1,4 @@
-<p align="center"><img src="images/wick-thumb-{{SHORT_SLUG}}.png" alt="{{TITLE}}"></p>
+<p align="center"><img src="https://wicksmods.github.io/images/{{SHORT_SLUG}}/thumb.png" alt="{{TITLE}}"></p>
 
 # {{TITLE}}
 

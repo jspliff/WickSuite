@@ -661,6 +661,74 @@ function FbCover() {
   );
 }
 
+// 1200×630 social cover — boost-friendly 1.91:1 ratio for FB/X/LinkedIn link cards.
+// Dedicated layout (not a SuiteBanner stretch) — uses the extra vertical space for
+// a full 7-addon roster with breathing room.
+function SocialCover() {
+  return (
+    <div style={{width:1200,height:630,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={1200} height={630} glowX="32%" glowY="55%" glowColor={G} accent="#6B21A8" opacity={0.18}/>
+      <Brackets size={20} thick={3}/>
+
+      {/* Left hero column */}
+      <div style={{position:'absolute',left:64,top:64,bottom:64,width:480,
+        display:'flex',flexDirection:'column',justifyContent:'center'}}>
+        <div style={{fontFamily:FM,fontSize:11,letterSpacing:'0.32em',color:MDIM,marginBottom:22}}>
+          WORLD OF WARCRAFT · TBC CLASSIC
+        </div>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch',marginBottom:24}}>
+          <WickWordmark size={104}/>
+          <div style={{fontFamily:FM,fontSize:18,letterSpacing:'0.5em',color:G,marginTop:6,textAlign:'right'}}>
+            SUITE
+          </div>
+        </div>
+        <div style={{height:1,background:BR,width:280,position:'relative',margin:'2px 0 18px'}}>
+          <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',
+            width:6,height:6,background:G,borderRadius:'50%'}}/>
+        </div>
+        <div style={{fontFamily:FU,fontSize:22,color:TX,lineHeight:1.5,fontWeight:500,marginBottom:8,maxWidth:420}}>
+          Seven precision addons.<br/>One palette. One voice.
+        </div>
+        <div style={{fontFamily:FU,fontSize:13,color:MDIM,lineHeight:1.6,maxWidth:420,marginBottom:22}}>
+          Built for serious TBC Classic raiders.
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          {['TBC Classic','v2.5.5','MIT'].map(t=>(
+            <span key={t} style={{fontFamily:FM,fontSize:9,color:G,border:`1px solid ${G}`,
+              padding:'3px 10px',opacity:0.6,letterSpacing:'0.18em'}}>{t}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Vertical divider */}
+      <div style={{position:'absolute',left:580,top:90,bottom:90,width:1,background:BR}}/>
+
+      {/* Right addon roster — 7 stacked cards, generous spacing */}
+      <div style={{position:'absolute',left:620,right:64,top:64,bottom:64,
+        display:'flex',flexDirection:'column',gap:6}}>
+        {SUITE_ADDONS.map(a => (
+          <div key={a.key} style={{flex:1,minHeight:0,display:'flex',alignItems:'center',gap:14,
+            background:'rgba(13,10,20,0.55)',border:`1px solid ${BR}`,padding:'0 16px',
+            position:'relative'}}>
+            <div style={{position:'absolute',left:0,top:0,bottom:0,width:3,background:a.accent}}/>
+            <img src={`images/${a.key}/logo-256.png`}
+              alt={a.mono}
+              style={{width:44,height:44,display:'block',flexShrink:0,imageRendering:'auto'}}/>
+            <div style={{flex:1,display:'flex',flexDirection:'column',gap:2}}>
+              <div style={{fontFamily:FD,fontSize:17,fontWeight:700,color:TX,letterSpacing:'0.01em'}}>
+                <span style={{color:G}}>Wick's</span> {a.name}
+              </div>
+              <div style={{fontFamily:FM,fontSize:10,color:MDIM,letterSpacing:'0.14em'}}>
+                {a.slash}<span style={{color:DIM,margin:'0 6px'}}>·</span>{a.tag}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Artboard({ id, label, w, h, Component }) {
   return (
     <div>
@@ -675,7 +743,7 @@ function Artboard({ id, label, w, h, Component }) {
 const ONLY_COMPONENTS = {
   banner:   { Comp: SuiteBanner,                            w: 860,  h: 320 },
   banner850:{ Comp: () => <SuiteBanner w={850}  h={316}/>,  w: 850,  h: 316 },
-  social:   { Comp: () => <SuiteBanner w={1200} h={630}/>,  w: 1200, h: 630 },
+  social:   { Comp: SocialCover,                            w: 1200, h: 630 },
   suite:    { Comp: SuiteThumb,                             w: 460,  h: 260 },
   cd:       { Comp: CDThumb,            w: 460, h: 260 },
   bis:      { Comp: BISThumb,           w: 460, h: 260 },
@@ -728,6 +796,9 @@ function App() {
     <>
       <div className="section-label">Suite Banner · GitHub / CurseForge hero</div>
       <Artboard id="suite-banner" label="Wick Suite — Project Banner" w={860} h={320} Component={SuiteBanner}/>
+
+      <div className="section-label">Social Cover · 1200×630 (FB / X / LinkedIn link cards)</div>
+      <Artboard id="social-cover" label="Wick Suite — Social Cover" w={1200} h={630} Component={SocialCover}/>
 
       <div className="section-label">Addon Thumbnails · Store cards</div>
       <Artboard id="suite-thumb" label="Wick's Suite" w={460} h={260} Component={SuiteThumb}/>

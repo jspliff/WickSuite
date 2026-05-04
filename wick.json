@@ -114,6 +114,23 @@
         "Drag-to-scale corner"
       ],
       "repo": "WicksStats"
+    },
+    {
+      "folder": "WicksQuestKey",
+      "title": "Wick's Quest Key",
+      "short": "Quest Key",
+      "slash": "/wqk",
+      "tagline": "Retail-style ExtraActionButton for TBC Classic. One bind to use the active quest item, auto-detected from your quest log.",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-quest-key",
+      "cf_project_id": 1533199,
+      "features": [
+        "Auto-detects quest items",
+        "Cycles on each press",
+        "Bind shown on the button"
+      ],
+      "repo": "WicksQuestKey"
     }
   ],
   "retired": [

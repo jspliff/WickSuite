@@ -207,13 +207,14 @@ function WickWordmark({ size=38, color=TX, accent=G }) {
    - origin: background-position, e.g. 'left top', 'center', '50% 0%'
 */
 const SHOTS = {
-  cd:     '../design-handoff/images/screenshots/screenshot-cd-tracker.png',
-  bis:    '../design-handoff/images/screenshots/screenshot-bis-tracker.png',
-  bis2:   '../design-handoff/images/screenshots/screenshot-bis-custom-lists.png',
-  trade:  '../design-handoff/images/screenshots/screenshot-trade-hall.png',
-  macro:  '../design-handoff/images/screenshots/screenshot-macro-builder.png',
-  combat: '../design-handoff/images/screenshots/screenshot-combat-log.png',
-  stats:  '../design-handoff/images/screenshots/screenshot-stats.png',
+  cd:       '../design-handoff/images/screenshots/screenshot-cd-tracker.png',
+  bis:      '../design-handoff/images/screenshots/screenshot-bis-tracker.png',
+  bis2:     '../design-handoff/images/screenshots/screenshot-bis-custom-lists.png',
+  trade:    '../design-handoff/images/screenshots/screenshot-trade-hall.png',
+  macro:    '../design-handoff/images/screenshots/screenshot-macro-builder.png',
+  combat:   '../design-handoff/images/screenshots/screenshot-combat-log.png',
+  stats:    '../design-handoff/images/screenshots/screenshot-stats.png',
+  questkey: '../design-handoff/images/screenshots/screenshot-questkey.png',
 };
 function Shot({ which, style={}, accent=G, size='auto', origin='left top', glowAt='20% 25%' }) {
   return (
@@ -463,16 +464,48 @@ function StatsThumb() {
   );
 }
 
+function QuestKeyThumb() {
+  return (
+    <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={460} height={260} glowX="25%" glowY="45%" glowColor={G} accent="#6B21A8" opacity={0.2}/>
+      <div style={{position:'absolute',left:-20,top:'50%',transform:'translateY(-50%)',
+        width:200,height:200,borderRadius:'50%',
+        background:`radial-gradient(circle, ${G}22 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:20,top:18,bottom:18,width:128,
+        display:'flex',flexDirection:'column',justifyContent:'flex-start',gap:10}}>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch'}}>
+          <WickWordmark size={22}/>
+          <div style={{fontFamily:FM,fontSize:7,letterSpacing:'0.3em',color:G,marginTop:2,textAlign:'right'}}>QUEST KEY</div>
+        </div>
+        <div style={{height:1,width:'100%',background:BR}}/>
+        <div style={{fontFamily:FU,fontSize:10,color:TX,lineHeight:1.35,fontWeight:500}}>One key.<br/>Every quest item.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:'auto'}}>
+          {['Auto-detects quest items','Cycles on each press','Bind shown on the button'].map(f=>(
+            <div key={f} style={{display:'flex',alignItems:'center',gap:4}}>
+              <div style={{width:3,height:3,borderRadius:'50%',background:G}}/>
+              <span style={{fontFamily:FM,fontSize:6.5,color:MDIM}}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{position:'absolute',right:14,top:14,bottom:14,left:160}}>
+        <Shot which="questkey" size="contain" origin="center" glowAt="50% 50%"/>
+      </div>
+    </div>
+  );
+}
+
 // Suite addon roster — single source of truth for SuiteThumb + SuiteBanner.
 // Add a new addon here and both artboards update automatically.
 // `icon` maps to design-handoff/images/wick-logo-{icon}-{256,512}.png filenames.
 const SUITE_ADDONS = [
-  { key:'bis',    icon:'bis',   name:'TBC BIS Tracker', mono:'BIS', accent:G, slash:'/wtbt', tag:'best-in-slot tracker' },
-  { key:'cd',     icon:'cd',    name:'CD Tracker',      mono:'CD',  accent:G, slash:'/wcdt', tag:'live cooldowns' },
-  { key:'trade',  icon:'th',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',  tag:'trade chat board' },
-  { key:'macro',  icon:'macro', name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb', tag:'macro editor' },
-  { key:'combat', icon:'cl',    name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',  tag:'CLEU viewer' },
-  { key:'stats',  icon:'stats', name:'Stats',           mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
+  { key:'bis',      icon:'bis',   name:'TBC BIS Tracker', mono:'BIS', accent:G, slash:'/wtbt',   tag:'best-in-slot tracker' },
+  { key:'cd',       icon:'cd',    name:'CD Tracker',      mono:'CD',  accent:G, slash:'/wcdt',   tag:'live cooldowns' },
+  { key:'trade',    icon:'th',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',    tag:'trade chat board' },
+  { key:'macro',    icon:'macro', name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb',   tag:'macro editor' },
+  { key:'combat',   icon:'cl',    name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',    tag:'CLEU viewer' },
+  { key:'stats',    icon:'stats', name:'Stats',           mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
+  { key:'questkey', icon:'qk',    name:'Quest Key',       mono:'QK',  accent:G, slash:'/wqk',    tag:'one key for quest items' },
 ];
 
 function SuiteThumb() {
@@ -640,15 +673,16 @@ function Artboard({ id, label, w, h, Component }) {
 // Render-only mode: ?only=banner|suite|cd|bis|trade renders a single artboard at its native
 // size with zero body chrome. Used for headless Chrome screenshot export.
 const ONLY_COMPONENTS = {
-  banner: { Comp: SuiteBanner,        w: 860, h: 320 },
-  suite:  { Comp: SuiteThumb,         w: 460, h: 260 },
-  cd:     { Comp: CDThumb,            w: 460, h: 260 },
-  bis:    { Comp: BISThumb,           w: 460, h: 260 },
-  trade:  { Comp: TradeThumb,         w: 460, h: 260 },
-  macro:  { Comp: MacroBuilderThumb,  w: 460, h: 260 },
-  combat: { Comp: CombatLogThumb,     w: 460, h: 260 },
-  stats:  { Comp: StatsThumb,         w: 460, h: 260 },
-  fbcover: { Comp: FbCover,           w: 851, h: 315 },
+  banner:   { Comp: SuiteBanner,        w: 860, h: 320 },
+  suite:    { Comp: SuiteThumb,         w: 460, h: 260 },
+  cd:       { Comp: CDThumb,            w: 460, h: 260 },
+  bis:      { Comp: BISThumb,           w: 460, h: 260 },
+  trade:    { Comp: TradeThumb,         w: 460, h: 260 },
+  macro:    { Comp: MacroBuilderThumb,  w: 460, h: 260 },
+  combat:   { Comp: CombatLogThumb,     w: 460, h: 260 },
+  stats:    { Comp: StatsThumb,         w: 460, h: 260 },
+  questkey: { Comp: QuestKeyThumb,      w: 460, h: 260 },
+  fbcover:  { Comp: FbCover,            w: 851, h: 315 },
 };
 
 function App() {
@@ -701,6 +735,7 @@ function App() {
       <Artboard id="macro-thumb" label="Wick's Macro Builder" w={460} h={260} Component={MacroBuilderThumb}/>
       <Artboard id="combat-thumb" label="Wick's Combat Log" w={460} h={260} Component={CombatLogThumb}/>
       <Artboard id="stats-thumb" label="Wick's Stats" w={460} h={260} Component={StatsThumb}/>
+      <Artboard id="questkey-thumb" label="Wick's Quest Key" w={460} h={260} Component={QuestKeyThumb}/>
 
       <div className="section-label">Social · Facebook cover (851×315)</div>
       <Artboard id="fb-cover" label="Wick's Mods — Facebook Cover" w={851} h={315} Component={FbCover}/>

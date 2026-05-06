@@ -319,6 +319,8 @@ function cmdList() {
 function cmdScaffold(rawTitle) {
   if (!rawTitle) die("usage: wick scaffold <Display Name>  (e.g. \"Wick's Aggro Meter\")");
   const config = readConfig();
+  const TOTAL = 5;  // templates → junction → git → GitHub → wick.json
+  const cmd = `wick scaffold "${rawTitle}"`;
 
   // Normalize title to always start with "Wick's "
   let title = rawTitle.trim();
@@ -360,6 +362,7 @@ function cmdScaffold(rawTitle) {
   };
 
   // ── 1. Copy templates with placeholder substitution ────────────────
+  setProgress(cmd, 1, TOTAL, "writing addon files from template");
   fs.mkdirSync(destAddon, { recursive: true });
   for (const entry of fs.readdirSync(TEMPLATE)) {
     const srcPath = path.join(TEMPLATE, entry);
@@ -374,6 +377,7 @@ function cmdScaffold(rawTitle) {
   ok(`files written to ${destAddon}`);
 
   // ── 2. Junction into project home so it shows up in Projects\Wick\ ─
+  setProgress(cmd, 2, TOTAL, "creating directory junction");
   try {
     run(`cmd /c mklink /J "${destJunct}" "${destAddon}"`);
     ok(`junction: ${destJunct} → ${destAddon}`);
@@ -382,6 +386,7 @@ function cmdScaffold(rawTitle) {
   }
 
   // ── 3. git init + initial commit ────────────────────────────────────
+  setProgress(cmd, 3, TOTAL, "git init + initial commit");
   gitIn(destAddon, "init", "-b", "main");
   gitIn(destAddon, "add", "-A");
   gitIn(destAddon, "-c", "user.name=Wick", "-c", "user.email=" + config.author_email,
@@ -389,6 +394,7 @@ function cmdScaffold(rawTitle) {
   ok("git: initial commit created");
 
   // ── 4. Create GitHub repo + push ───────────────────────────────────
+  setProgress(cmd, 4, TOTAL, "creating GitHub repo + push");
   try {
     const ghCmd = `"${GH}" repo create ${config.github_user}/${folder} --public --source=. --remote=origin --push --description="${vars.TAGLINE}"`;
     run(ghCmd, { cwd: destAddon });
@@ -400,6 +406,7 @@ function cmdScaffold(rawTitle) {
   }
 
   // ── 5. Register in wick.json ────────────────────────────────────────
+  setProgress(cmd, 5, TOTAL, "registering in wick.json");
   config.addons.push({
     folder,
     title,
@@ -416,6 +423,7 @@ function cmdScaffold(rawTitle) {
   writeConfig(config);
   ok(`wick.json: registered ${folder}`);
 
+  clearProgress();
   log(`\n✓ Done. Next steps:`);
   log(`   1. Edit ${folder}/Core.lua and ${folder}/UI.lua to implement your addon`);
   log(`   2. Take in-game screenshots — save to WickSuite/images/{short-key}/screenshots/main.png`);
@@ -445,8 +453,14 @@ function cmdSync() {
   ].join("\n");
   const block = `${marker.start}\n${table}\n${marker.end}`;
 
+  // Each addon README + each MoreFromWick.lua + the suite README is one phase.
+  const TOTAL = config.addons.length * 2 + 1;
+  let phase = 0;
+
   let touched = 0;
   for (const a of config.addons) {
+    phase++;
+    setProgress("wick sync", phase, TOTAL, `README: ${a.folder}`);
     const readme = path.join(config.addons_root_local, a.folder, "README.md");
     if (!fs.existsSync(readme)) continue;
     let body = fs.readFileSync(readme, "utf8");
@@ -459,6 +473,8 @@ function cmdSync() {
     }
   }
   // Also sync WickSuite/README.md
+  phase++;
+  setProgress("wick sync", phase, TOTAL, "README: WickSuite");
   const suiteReadme = path.join(SUITE_DIR, "README.md");
   if (fs.existsSync(suiteReadme)) {
     let body = fs.readFileSync(suiteReadme, "utf8");
@@ -477,6 +493,8 @@ function cmdSync() {
   };
   const luaEsc = s => String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
   for (const a of config.addons) {
+    phase++;
+    setProgress("wick sync", phase, TOTAL, `MoreFromWick: ${a.folder}`);
     const mfwPath = path.join(config.addons_root_local, a.folder, "MoreFromWick.lua");
     if (!fs.existsSync(mfwPath)) continue;
     const rows = config.addons
@@ -497,6 +515,7 @@ function cmdSync() {
     }
   }
 
+  clearProgress();
   log(touched ? `\n✓ ${touched} file(s) synced` : `\n(no files had the marker; add <!-- wick:suite-table:start --> … <!-- wick:suite-table:end --> to enable sync)`);
 }
 
@@ -504,7 +523,12 @@ function cmdSync() {
 // render — shortcut to grab-artboards.mjs
 // ═══════════════════════════════════════════════════════════════════════════
 function cmdRender() {
-  run(`node "${GRAB_TOOL}"`);
+  setProgress("wick render", 1, 1, "rendering all artboards");
+  try {
+    run(`node "${GRAB_TOOL}"`);
+  } finally {
+    clearProgress();
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

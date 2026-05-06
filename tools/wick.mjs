@@ -36,8 +36,31 @@ const GH         = "C:/Program Files/GitHub CLI/gh.exe";
 
 // ── helpers ───────────────────────────────────────────────────────────────
 const log  = (...a) => console.log(...a);
-const die  = (msg) => { console.error("✗", msg); process.exit(1); };
+const die  = (msg) => { clearProgress(); console.error("✗", msg); process.exit(1); };
 const ok   = (msg) => console.log("✓", msg);
+
+// ── Wick progress indicator (status line) ─────────────────────────────────
+// Writes ~/.claude/wick-progress.json so the custom status line at
+// ~/.claude/wick-statusline.mjs can render a unicode progress bar above the
+// chat input while a wick command is running. See memory/reference_wick_progress_indicator.md.
+const PROGRESS_FILE = path.join(
+  process.env.USERPROFILE || process.env.HOME || "C:/Users/jspli",
+  ".claude/wick-progress.json"
+);
+function setProgress(command, phase, total, label) {
+  try {
+    fs.writeFileSync(
+      PROGRESS_FILE,
+      JSON.stringify({ command, phase, total, label }) + "\n"
+    );
+  } catch (_) { /* status line is cosmetic; never fail the run for it */ }
+}
+function clearProgress() {
+  try { fs.rmSync(PROGRESS_FILE); } catch (_) { /* idempotent */ }
+}
+process.on("exit",       clearProgress);
+process.on("SIGINT",     () => { clearProgress(); process.exit(130); });
+process.on("uncaughtException", (e) => { clearProgress(); console.error(e); process.exit(1); });
 
 function readConfig() {
   return JSON.parse(fs.readFileSync(CONFIG, "utf8"));
@@ -502,7 +525,12 @@ async function cmdRelease(folder, newVer, ...flags) {
   const toc = path.join(dir, `${folder}.toc`);
   if (!fs.existsSync(toc)) die(`.toc not found: ${toc}`);
 
+  // 6 visible phases: bump → changelog → git → zip → CF upload → FB announce.
+  const TOTAL = noAnnounce ? 5 : 6;
+  const cmd   = `wick release ${folder} v${newVer}`;
+
   // ── Bump version in .toc ──────────────────────────────────────────
+  setProgress(cmd, 1, TOTAL, "bumping .toc version");
   let tocBody = fs.readFileSync(toc, "utf8");
   const oldVer = (tocBody.match(/^## Version:\s*(.+)$/m) || [])[1] || "?";
   tocBody = tocBody.replace(/^## Version:.*$/m, `## Version: ${newVer}`);
@@ -512,6 +540,7 @@ async function cmdRelease(folder, newVer, ...flags) {
   // ── Append CHANGELOG entry (stub — user edits after) ───────────────
   // Skip the append if an entry for this version already exists (re-release
   // or the user pre-wrote real notes before running `wick release`).
+  setProgress(cmd, 2, TOTAL, "updating CHANGELOG");
   const changelog = path.join(dir, "CHANGELOG.md");
   if (fs.existsSync(changelog)) {
     const date = new Date().toISOString().slice(0, 10);
@@ -529,6 +558,7 @@ async function cmdRelease(folder, newVer, ...flags) {
   }
 
   // ── Commit + tag + push ───────────────────────────────────────────
+  setProgress(cmd, 3, TOTAL, "git commit + tag + push");
   gitIn(dir, "add", "-A");
   gitIn(dir, "-c", `user.name=${config.author}`, "-c", `user.email=${config.author_email}`,
         "commit", "-q", "-m", `Release ${newVer}`);
@@ -538,6 +568,7 @@ async function cmdRelease(folder, newVer, ...flags) {
   ok(`git: tagged v${newVer} and pushed`);
 
   // ── Zip the addon folder ─────────────────────────────────────────
+  setProgress(cmd, 4, TOTAL, "building release zip");
   const zipName = `${folder}-v${newVer}.zip`;
   const zipPath = path.join(config.addons_root_local, zipName);
   if (fs.existsSync(zipPath)) fs.rmSync(zipPath);
@@ -550,6 +581,7 @@ async function cmdRelease(folder, newVer, ...flags) {
   // Write metadata to a temp JSON file and use curl's `-F metadata=<file`
   // reader. Avoids cross-shell single-quote hell (cmd.exe / bash / ps) that
   // would otherwise split the JSON on spaces and lose the metadata field.
+  setProgress(cmd, 5, TOTAL, "uploading to CurseForge");
   log(`\nUploading to CurseForge project ${addon.cf_project_id} ...`);
   const metadata = JSON.stringify({
     gameVersions: [config.cf_game_version_id],
@@ -581,10 +613,12 @@ async function cmdRelease(folder, newVer, ...flags) {
   if (noAnnounce) {
     log(`  (FB: --no-announce passed, skipping post)`);
   } else {
+    setProgress(cmd, 6, TOTAL, "posting to Facebook");
     try { announceFB(addon, newVer, dir, config); }
     catch (e) { log(`  (FB: announce threw, swallowed: ${e.message})`); }
   }
 
+  clearProgress();
   log(`\n✓ Release complete.`);
   log(`  • Update CHANGELOG.md with real changes (stub inserted)`);
   log(`  • Re-upload Featured image if needed`);

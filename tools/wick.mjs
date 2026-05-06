@@ -445,6 +445,35 @@ function cmdSync() {
       if (next !== body) { fs.writeFileSync(suiteReadme, next); touched++; ok(`updated WickSuite/README.md`); }
     }
   }
+  // ── MoreFromWick.lua suite-data block ─────────────────────────────
+  // Any addon with a MoreFromWick.lua gets its SUITE table regenerated from
+  // wick.json. Excludes the host addon and any addon without cf_project_id.
+  const luaMarker = {
+    start: "-- wick:suite-data:start",
+    end:   "-- wick:suite-data:end",
+  };
+  const luaEsc = s => String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  for (const a of config.addons) {
+    const mfwPath = path.join(config.addons_root_local, a.folder, "MoreFromWick.lua");
+    if (!fs.existsSync(mfwPath)) continue;
+    const rows = config.addons
+      .filter(x => x.folder !== a.folder && x.cf_project_id)
+      .map(x => {
+        const tag = x.short_tagline || x.tagline || "";
+        return `    { folder = "${luaEsc(x.folder)}", title = "${luaEsc(x.title)}", tagline = "${luaEsc(tag)}", slug = "${luaEsc(x.cf_slug)}" },`;
+      })
+      .join("\n");
+    const luaBlock = `${luaMarker.start}\nlocal SUITE = {\n${rows}\n}\n${luaMarker.end}`;
+    let body = fs.readFileSync(mfwPath, "utf8");
+    const re = new RegExp(`${luaMarker.start}[\\s\\S]*?${luaMarker.end}`);
+    if (re.test(body)) {
+      const next = body.replace(re, luaBlock);
+      if (next !== body) { fs.writeFileSync(mfwPath, next); touched++; ok(`updated ${a.folder}/MoreFromWick.lua`); }
+    } else {
+      log(`  (${a.folder}/MoreFromWick.lua has no wick:suite-data marker — add it manually to enable sync)`);
+    }
+  }
+
   log(touched ? `\n✓ ${touched} file(s) synced` : `\n(no files had the marker; add <!-- wick:suite-table:start --> … <!-- wick:suite-table:end --> to enable sync)`);
 }
 

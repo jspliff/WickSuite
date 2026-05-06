@@ -23,6 +23,7 @@
       "short": "BIS Tracker",
       "slash": "/wtbt",
       "tagline": "Best-in-slot gear tracking for every class, every spec, every phase of TBC Classic.",
+      "short_tagline": "Best-in-slot gear tracker for every class and spec",
       "accent": "#a335ee",
       "accent_name": "epic",
       "cf_slug": "wicks-tbc-bis-tracker",
@@ -40,6 +41,7 @@
       "short": "CD Tracker",
       "slash": "/wcdt",
       "tagline": "Live party and raid cooldown tracker. Kicks, saves, offensives, utility — all in one tight panel.",
+      "short_tagline": "Live party and raid cooldown tracker",
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-cd-tracker",
@@ -57,6 +59,7 @@
       "short": "Trade Hall",
       "slash": "/wth",
       "tagline": "Trade channel, as a bulletin board. Seven categories, aged-out listings, no wall-of-spam.",
+      "short_tagline": "Trade chat as a categorized bulletin board",
       "accent": "#f59e0b",
       "accent_name": "amber",
       "cf_slug": "trade-hall",
@@ -74,6 +77,7 @@
       "short": "Macro Builder",
       "slash": "/wsmb",
       "tagline": "Clean macro editor for TBC Classic. Click-to-insert chips, drag macros straight onto your action bars, curated presets for all 9 classes.",
+      "short_tagline": "Clean macro editor with chips and class presets",
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-macro-builder",
@@ -91,6 +95,7 @@
       "short": "Combat Log",
       "slash": "/wcl",
       "tagline": "Raw COMBAT_LOG_EVENT_UNFILTERED viewer. Live event list with filters and side-panel raw-arg inspection.",
+      "short_tagline": "Live COMBAT_LOG_EVENT viewer with filters",
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-combat-log",
@@ -110,6 +115,7 @@
       "short": "Stats",
       "slash": "/wstats",
       "tagline": "Detailed character stat panel docked next to the character frame. Shows everything Blizzard hides.",
+      "short_tagline": "Detailed stats Blizzard hides",
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-stats",
@@ -127,6 +133,7 @@
       "short": "Quest Key",
       "slash": "/wqk",
       "tagline": "Retail-style ExtraActionButton for TBC Classic. One bind to use the active quest item, auto-detected from your quest log.",
+      "short_tagline": "ExtraActionButton for quest items",
       "accent": "#4FC778",
       "accent_name": "fel-green",
       "cf_slug": "wicks-quest-key",
@@ -137,6 +144,46 @@
         "Bind shown on the button"
       ],
       "repo": "WicksQuestKey"
+    },
+    {
+      "folder": "WicksLayers",
+      "title": "Wick's Layers",
+      "short": "Layers",
+      "slash": "/wl",
+      "tagline": "Layer detection for TBC Classic Anniversary. Fingerprints NPC GUIDs to track which layer you are on, scrapes AutoLayer call-outs, and broadcasts to the WicksLayer channel.",
+      "short_tagline": "Layer detection via NPC GUID fingerprinting",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-layers",
+      "cf_project_id": null,
+      "key": "layers",
+      "icon": "la",
+      "features": [
+        "GUID fingerprinting (works alone)",
+        "AutoLayer channel interop",
+        "WicksLayer broadcast channel"
+      ],
+      "repo": "WicksLayers"
+    },
+    {
+      "folder": "WicksTotemsAndThings",
+      "title": "Wick's Totems and Things",
+      "short": "Totems",
+      "slash": "/wtt",
+      "tagline": "Enhancement shaman command bar. Totem twist on one keybind, swing timer, Windfury and Stormstrike proc flashes, range warnings, ankh count.",
+      "short_tagline": "Enhancement shaman command bar",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-totems-and-things",
+      "cf_project_id": 1535194,
+      "key": "totems",
+      "icon": "tt",
+      "features": [
+        "Totem twist with click-now cue",
+        "Affected-count overlay",
+        "Swing + WF + ankh tracker"
+      ],
+      "repo": "WicksTotemsAndThings"
     }
   ],
   "retired": [

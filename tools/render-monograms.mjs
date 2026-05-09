@@ -11,8 +11,12 @@ const BASE = "file:///C:/Users/jspli/Projects/Wick/WickSuite/logo-variants.html"
 const OUT = "C:/Users/jspli/Projects/Wick/WickSuite/images";
 
 const TILES = [
-  { id: "wick-logo-qk-256",  slug: "questkey", out: "logo-256.png", w: 256, h: 256 },
-  { id: "wick-logo-qk-512",  slug: "questkey", out: "logo-512.png", w: 512, h: 512 },
+  { id: "wick-logo-qk-256",     slug: "questkey", out: "logo-256.png", w: 256, h: 256 },
+  { id: "wick-logo-qk-512",     slug: "questkey", out: "logo-512.png", w: 512, h: 512 },
+  { id: "wick-logo-layers-256", slug: "layers",   out: "logo-256.png", w: 256, h: 256 },
+  { id: "wick-logo-layers-512", slug: "layers",   out: "logo-512.png", w: 512, h: 512 },
+  { id: "wick-logo-tt-256",     slug: "totems",   out: "logo-256.png", w: 256, h: 256 },
+  { id: "wick-logo-tt-512",     slug: "totems",   out: "logo-512.png", w: 512, h: 512 },
 ];
 
 const browser = await puppeteer.launch({

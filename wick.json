@@ -184,6 +184,26 @@
         "Swing + WF + ankh tracker"
       ],
       "repo": "WicksTotemsAndThings"
+    },
+    {
+      "folder": "WicksBags",
+      "title": "Wick's Bags",
+      "short": "Bags",
+      "slash": "/wbags",
+      "tagline": "Categorized bag and bank panels for TBC Classic. Auto-categorize, masonry layout, ItemRack integration, secure right-click for combat consumables.",
+      "short_tagline": "Categorized bags + bank with masonry layout",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-bags",
+      "cf_project_id": 1537836,
+      "key": "bags",
+      "icon": "bg",
+      "features": [
+        "Auto-categorize by class + subclass",
+        "Masonry layout, resizable",
+        "Bank panel with buy-slot button"
+      ],
+      "repo": "WicksBags"
     }
   ],
   "retired": [

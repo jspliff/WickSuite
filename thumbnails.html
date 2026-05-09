@@ -215,6 +215,8 @@ const SHOTS = {
   combat:   'images/combat/screenshots/main.png',
   stats:    'images/stats/screenshots/main.png',
   questkey: 'images/questkey/screenshots/main.png',
+  totems:   'images/totems/screenshots/main.png',
+  bags:     'images/bags/screenshots/main.png',
 };
 function Shot({ which, style={}, accent=G, size='auto', origin='left top', glowAt='20% 25%' }) {
   return (
@@ -464,6 +466,68 @@ function StatsThumb() {
   );
 }
 
+function TotemsThumb() {
+  return (
+    <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={460} height={260} glowX="25%" glowY="45%" glowColor={G} accent="#6B21A8" opacity={0.2}/>
+      <div style={{position:'absolute',left:-20,top:'50%',transform:'translateY(-50%)',
+        width:200,height:200,borderRadius:'50%',
+        background:`radial-gradient(circle, ${G}22 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:20,top:18,bottom:18,width:128,
+        display:'flex',flexDirection:'column',justifyContent:'flex-start',gap:10}}>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch'}}>
+          <WickWordmark size={22}/>
+          <div style={{fontFamily:FM,fontSize:7,letterSpacing:'0.3em',color:G,marginTop:2,textAlign:'right'}}>TOTEMS &amp; THINGS</div>
+        </div>
+        <div style={{height:1,width:'100%',background:BR}}/>
+        <div style={{fontFamily:FU,fontSize:10,color:TX,lineHeight:1.35,fontWeight:500}}>Twist totems.<br/>Track procs.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:'auto'}}>
+          {['Affected-count overlay','Twist + click-now cue','Swing + WF + ankh'].map(f=>(
+            <div key={f} style={{display:'flex',alignItems:'center',gap:4}}>
+              <div style={{width:3,height:3,borderRadius:'50%',background:G}}/>
+              <span style={{fontFamily:FM,fontSize:6.5,color:MDIM}}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{position:'absolute',right:14,top:14,bottom:14,left:160}}>
+        <Shot which="totems" size="contain" origin="center" glowAt="50% 50%"/>
+      </div>
+    </div>
+  );
+}
+
+function BagsThumb() {
+  return (
+    <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={460} height={260} glowX="25%" glowY="45%" glowColor={G} accent="#6B21A8" opacity={0.2}/>
+      <div style={{position:'absolute',left:-20,top:'50%',transform:'translateY(-50%)',
+        width:200,height:200,borderRadius:'50%',
+        background:`radial-gradient(circle, ${G}22 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:20,top:18,bottom:18,width:128,
+        display:'flex',flexDirection:'column',justifyContent:'flex-start',gap:10}}>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch'}}>
+          <WickWordmark size={22}/>
+          <div style={{fontFamily:FM,fontSize:7,letterSpacing:'0.3em',color:G,marginTop:2,textAlign:'right'}}>BAGS</div>
+        </div>
+        <div style={{height:1,width:'100%',background:BR}}/>
+        <div style={{fontFamily:FU,fontSize:10,color:TX,lineHeight:1.35,fontWeight:500}}>Bags + bank.<br/>Categorized.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:'auto'}}>
+          {['Auto-categorize, masonry layout','Bank panel, buy-slot button','ItemRack sets as Equipment'].map(f=>(
+            <div key={f} style={{display:'flex',alignItems:'center',gap:4}}>
+              <div style={{width:3,height:3,borderRadius:'50%',background:G}}/>
+              <span style={{fontFamily:FM,fontSize:6.5,color:MDIM}}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{position:'absolute',right:14,top:14,bottom:14,left:160}}>
+        <Shot which="bags" size="contain" origin="center" glowAt="50% 50%"/>
+      </div>
+    </div>
+  );
+}
+
 function QuestKeyThumb() {
   return (
     <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
@@ -499,13 +563,15 @@ function QuestKeyThumb() {
 // Add a new addon here and both artboards update automatically.
 // `key` is the per-addon folder under WickSuite/images/ holding logo + thumb files.
 const SUITE_ADDONS = [
-  { key:'bis',      name:'TBC BIS Tracker', mono:'BIS', accent:G, slash:'/wtbt',   tag:'best-in-slot tracker' },
-  { key:'cd',       name:'CD Tracker',      mono:'CD',  accent:G, slash:'/wcdt',   tag:'live cooldowns' },
-  { key:'trade',    name:'Trade Hall',      mono:'TH',  accent:G, slash:'/wth',    tag:'trade chat board' },
-  { key:'macro',    name:'Macro Builder',   mono:'MB',  accent:G, slash:'/wsmb',   tag:'macro editor' },
-  { key:'combat',   name:'Combat Log',      mono:'CL',  accent:G, slash:'/wcl',    tag:'CLEU viewer' },
-  { key:'stats',    name:'Stats',           mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
-  { key:'questkey', name:'Quest Key',       mono:'QK',  accent:G, slash:'/wqk',    tag:'one key for quest items' },
+  { key:'bis',      name:'TBC BIS Tracker', short:'BIS Tracker',   mono:'BIS', accent:G, slash:'/wtbt',   tag:'best-in-slot tracker' },
+  { key:'cd',       name:'CD Tracker',      short:'CD Tracker',    mono:'CD',  accent:G, slash:'/wcdt',   tag:'live cooldowns' },
+  { key:'trade',    name:'Trade Hall',      short:'Trade Hall',    mono:'TH',  accent:G, slash:'/wth',    tag:'trade chat board' },
+  { key:'macro',    name:'Macro Builder',   short:'Macro',         mono:'MB',  accent:G, slash:'/wsmb',   tag:'macro editor' },
+  { key:'combat',   name:'Combat Log',      short:'Combat Log',    mono:'CL',  accent:G, slash:'/wcl',    tag:'CLEU viewer' },
+  { key:'stats',    name:'Stats',           short:'Stats',         mono:'ST',  accent:G, slash:'/wstats', tag:'detailed stat panel' },
+  { key:'questkey', name:'Quest Key',       short:'Quest Key',     mono:'QK',  accent:G, slash:'/wqk',    tag:'one key for quest items' },
+  { key:'totems',   name:'Totems',          short:'Totems',        mono:'TT',  accent:G, slash:'/wtt',    tag:'shaman twist + procs' },
+  { key:'bags',     name:'Bags',            short:'Bags',          mono:'BG',  accent:G, slash:'/wbags',  tag:'categorized bags + bank' },
 ];
 
 function SuiteThumb() {
@@ -523,7 +589,7 @@ function SuiteThumb() {
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:4,height:4,background:G,borderRadius:'50%'}}/>
         </div>
         <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6}}>
-          Seven precision addons.<br/>One palette. One voice.
+          Nine precision addons.<br/>One palette. One voice.
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:6}}>
           {['TBC Classic','v2.5.5','MIT'].map(t=>(
@@ -581,7 +647,7 @@ function SuiteBanner({ w = 860, h = 320 } = {}) {
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',width:4,height:4,background:G,borderRadius:'50%'}}/>
         </div>
         <div style={{fontFamily:FU,fontSize:11,color:TX,lineHeight:1.5,marginBottom:8,maxWidth:220,fontWeight:500}}>
-          Seven precision addons.<br/>One palette. One voice.
+          Nine precision addons.<br/>One palette. One voice.
         </div>
         <div style={{fontFamily:FU,fontSize:9,color:MDIM,lineHeight:1.6,maxWidth:220}}>
           Built for serious TBC Classic raiders.
@@ -589,30 +655,34 @@ function SuiteBanner({ w = 860, h = 320 } = {}) {
       </div>
       {/* Vertical divider */}
       <div style={{position:'absolute',left:316,top:30,bottom:50,width:1,background:BR}}/>
-      {/* Right card strip — 5 monogram cards, one per addon */}
-      <div style={{position:'absolute',left:332,right:18,top:24,bottom:50,
-        display:'flex',gap:8}}>
+      {/* Right card strip — one card per addon. Tightened margins + gap
+          to fit 8 cards comfortably (was sized for 5-7). */}
+      <div style={{position:'absolute',left:320,right:10,top:24,bottom:50,
+        display:'flex',gap:5,overflow:'hidden'}}>
         {SUITE_ADDONS.map(a => (
-          <div key={a.key} style={{flex:1,display:'flex',flexDirection:'column',
+          <div key={a.key} style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',
             background:'rgba(13,10,20,0.5)',
             border:`1px solid ${BR}`,
-            position:'relative',padding:'12px 10px 14px'}}>
+            position:'relative',padding:'10px 6px 12px',overflow:'hidden'}}>
             {/* Top accent strip */}
             <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:a.accent}}/>
             {/* Monogram icon */}
             <img src={`images/${a.key}/logo-512.png`}
               alt={a.mono}
-              style={{width:'100%',aspectRatio:1,marginBottom:10,display:'block',
+              style={{width:'100%',aspectRatio:1,marginBottom:8,display:'block',
                 imageRendering:'auto'}}/>
-            {/* Name */}
-            <div style={{fontFamily:FD,fontWeight:700,fontSize:10,color:TX,
-              textAlign:'center',lineHeight:1.25,minHeight:24}}>
+            {/* Name — use the `short` variant so multi-word names like
+                "BIS Tracker" / "CD Tracker" don't word-break a single
+                letter onto its own line at this card width. */}
+            <div style={{fontFamily:FD,fontWeight:700,fontSize:8.5,color:TX,
+              textAlign:'center',lineHeight:1.25,minHeight:22,
+              wordBreak:'normal',hyphens:'none'}}>
               <span style={{color:G}}>Wick's</span><br/>
-              {a.name}
+              {a.short || a.name}
             </div>
             {/* Slash */}
-            <div style={{fontFamily:FM,fontSize:7,color:a.accent,
-              textAlign:'center',marginTop:4,letterSpacing:'0.1em'}}>
+            <div style={{fontFamily:FM,fontSize:6.5,color:a.accent,
+              textAlign:'center',marginTop:3,letterSpacing:'0.08em'}}>
               {a.slash}
             </div>
           </div>
@@ -687,7 +757,7 @@ function SocialCover() {
             width:6,height:6,background:G,borderRadius:'50%'}}/>
         </div>
         <div style={{fontFamily:FU,fontSize:22,color:TX,lineHeight:1.5,fontWeight:500,marginBottom:8,maxWidth:420}}>
-          Seven precision addons.<br/>One palette. One voice.
+          Nine precision addons.<br/>One palette. One voice.
         </div>
         <div style={{fontFamily:FU,fontSize:13,color:MDIM,lineHeight:1.6,maxWidth:420,marginBottom:22}}>
           Built for serious TBC Classic raiders.
@@ -752,6 +822,8 @@ const ONLY_COMPONENTS = {
   combat:   { Comp: CombatLogThumb,     w: 460, h: 260 },
   stats:    { Comp: StatsThumb,         w: 460, h: 260 },
   questkey: { Comp: QuestKeyThumb,      w: 460, h: 260 },
+  totems:   { Comp: TotemsThumb,        w: 460, h: 260 },
+  bags:     { Comp: BagsThumb,          w: 460, h: 260 },
   fbcover:  { Comp: FbCover,            w: 851, h: 315 },
 };
 
@@ -809,6 +881,8 @@ function App() {
       <Artboard id="combat-thumb" label="Wick's Combat Log" w={460} h={260} Component={CombatLogThumb}/>
       <Artboard id="stats-thumb" label="Wick's Stats" w={460} h={260} Component={StatsThumb}/>
       <Artboard id="questkey-thumb" label="Wick's Quest Key" w={460} h={260} Component={QuestKeyThumb}/>
+      <Artboard id="totems-thumb" label="Wick's Totems and Things" w={460} h={260} Component={TotemsThumb}/>
+      <Artboard id="bags-thumb" label="Wick's Bags" w={460} h={260} Component={BagsThumb}/>
 
       <div className="section-label">Social · Facebook cover (851×315)</div>
       <Artboard id="fb-cover" label="Wick's Mods — Facebook Cover" w={851} h={315} Component={FbCover}/>

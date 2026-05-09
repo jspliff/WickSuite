@@ -215,8 +215,8 @@
       "short_tagline": "Smart shapeshift binding for druids",
       "accent": "#4FC778",
       "accent_name": "fel-green",
-      "cf_slug": "travel-form",
-      "cf_project_id": null,
+      "cf_slug": "wicks-travel-form",
+      "cf_project_id": 1538543,
       "features": [
         "Flight · Travel · Aquatic · Cat",
         "Outland flyable-zone whitelist",

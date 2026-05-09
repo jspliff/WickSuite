@@ -584,8 +584,16 @@ async function cmdRelease(folder, newVer, ...flags) {
   // ── Commit + tag + push ───────────────────────────────────────────
   setProgress(cmd, 3, TOTAL, "git commit + tag + push");
   gitIn(dir, "add", "-A");
-  gitIn(dir, "-c", `user.name=${config.author}`, "-c", `user.email=${config.author_email}`,
-        "commit", "-q", "-m", `Release ${newVer}`);
+  // Only commit if there's something to commit. Lets us re-ship a version
+  // whose code was already committed earlier (e.g. inaugural releases where
+  // v0.1.0 was committed before the CF project existed).
+  const status = runCapture(`git -C "${dir}" status --porcelain`);
+  if (status.trim()) {
+    gitIn(dir, "-c", `user.name=${config.author}`, "-c", `user.email=${config.author_email}`,
+          "commit", "-q", "-m", `Release ${newVer}`);
+  } else {
+    log(`  working tree clean — skipping release commit`);
+  }
   gitIn(dir, "tag", `v${newVer}`);
   gitIn(dir, "push", "origin", "main");
   gitIn(dir, "push", "origin", `v${newVer}`);

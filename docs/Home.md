@@ -1,6 +1,6 @@
 # Wick Suite
 
-> Precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
+> A suite of precision addons for serious TBC Classic raiders. One locked palette, one voice, one chrome.
 
 ## The addons
 
@@ -12,6 +12,9 @@
 | **Wick's Macro Builder** | [install](https://www.curseforge.com/wow/addons/wicks-macro-builder) | [repo](https://github.com/Wicksmods/WicksMacroBuilder) · [wiki](https://github.com/Wicksmods/WicksMacroBuilder/wiki) |
 | **Wick's Combat Log** | [install](https://www.curseforge.com/wow/addons/wicks-combat-log) | [repo](https://github.com/Wicksmods/WicksCombatLog) · [wiki](https://github.com/Wicksmods/WicksCombatLog/wiki) |
 | **Wick's Stats** | [install](https://www.curseforge.com/wow/addons/wicks-stats) | [repo](https://github.com/Wicksmods/WicksStats) |
+| **Wick's Quest Key** | [install](https://www.curseforge.com/wow/addons/wicks-quest-key) | [repo](https://github.com/Wicksmods/WicksQuestKey) |
+| **Wick's Totems and Things** | [install](https://www.curseforge.com/wow/addons/wicks-totems-and-things) | [repo](https://github.com/Wicksmods/WicksTotemsAndThings) |
+| **Wick's Bags** | [install](https://www.curseforge.com/wow/addons/wicks-bags) | [repo](https://github.com/Wicksmods/WicksBags) |
 
 ## Wiki pages
 

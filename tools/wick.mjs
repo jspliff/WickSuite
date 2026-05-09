@@ -650,6 +650,23 @@ async function cmdRelease(folder, newVer, ...flags) {
     catch (e) { log(`  (FB: announce threw, swallowed: ${e.message})`); }
   }
 
+  // ── X (Twitter) intent URL — auto API is paywalled, click-to-post ──
+  if (!noAnnounce) {
+    const cfUrl = `https://www.curseforge.com/wow/addons/${addon.cf_slug}`;
+    const tagline = addon.short_tagline || addon.tagline || "";
+    const xText = [
+      `${addon.title} v${newVer} is live on CurseForge.`,
+      "",
+      tagline,
+      "",
+      cfUrl,
+      "",
+      "#WoWClassic #TBCClassic",
+    ].join("\n");
+    const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(xText)}`;
+    log(`\nX (click to compose):\n  ${xUrl}`);
+  }
+
   clearProgress();
   log(`\n✓ Release complete.`);
   log(`  • Update CHANGELOG.md with real changes (stub inserted)`);

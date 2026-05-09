@@ -217,6 +217,7 @@ const SHOTS = {
   questkey: 'images/questkey/screenshots/main.png',
   totems:   'images/totems/screenshots/main.png',
   bags:     'images/bags/screenshots/main.png',
+  travel:   'images/travel/screenshots/main.png',
 };
 function Shot({ which, style={}, accent=G, size='auto', origin='left top', glowAt='20% 25%' }) {
   return (
@@ -528,6 +529,37 @@ function BagsThumb() {
   );
 }
 
+function TravelThumb() {
+  return (
+    <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
+      <DungeonBg width={460} height={260} glowX="25%" glowY="45%" glowColor={G} accent="#6B21A8" opacity={0.2}/>
+      <div style={{position:'absolute',left:-20,top:'50%',transform:'translateY(-50%)',
+        width:200,height:200,borderRadius:'50%',
+        background:`radial-gradient(circle, ${G}22 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:20,top:18,bottom:18,width:128,
+        display:'flex',flexDirection:'column',justifyContent:'flex-start',gap:10}}>
+        <div style={{display:'inline-flex',flexDirection:'column',alignItems:'stretch'}}>
+          <WickWordmark size={22}/>
+          <div style={{fontFamily:FM,fontSize:7,letterSpacing:'0.3em',color:G,marginTop:2,textAlign:'right'}}>TRAVEL FORM</div>
+        </div>
+        <div style={{height:1,width:'100%',background:BR}}/>
+        <div style={{fontFamily:FU,fontSize:10,color:TX,lineHeight:1.35,fontWeight:500}}>One key.<br/>Right form.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:3,marginTop:'auto'}}>
+          {['Flight · Travel · Aquatic · Cat','Outland flyable whitelist','Contextual icon preview'].map(f=>(
+            <div key={f} style={{display:'flex',alignItems:'center',gap:4}}>
+              <div style={{width:3,height:3,borderRadius:'50%',background:G}}/>
+              <span style={{fontFamily:FM,fontSize:6.5,color:MDIM}}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{position:'absolute',right:14,top:14,bottom:14,left:160}}>
+        <Shot which="travel" size="contain" origin="center" glowAt="50% 50%"/>
+      </div>
+    </div>
+  );
+}
+
 function QuestKeyThumb() {
   return (
     <div style={{width:460,height:260,position:'relative',overflow:'hidden',fontFamily:FU,background:BG}}>
@@ -572,6 +604,7 @@ const SUITE_ADDONS = [
   { key:'questkey', name:'Quest Key',       short:'Quest Key',     mono:'QK',  accent:G, slash:'/wqk',    tag:'one key for quest items' },
   { key:'totems',   name:'Totems',          short:'Totems',        mono:'TT',  accent:G, slash:'/wtt',    tag:'shaman twist + procs' },
   { key:'bags',     name:'Bags',            short:'Bags',          mono:'BG',  accent:G, slash:'/wbags',  tag:'categorized bags + bank' },
+  { key:'travel',   name:'Travel Form',     short:'Travel Form',   mono:'TF',  accent:G, slash:'/wstf',   tag:'smart shapeshift bind' },
 ];
 
 function SuiteThumb() {
@@ -824,6 +857,7 @@ const ONLY_COMPONENTS = {
   questkey: { Comp: QuestKeyThumb,      w: 460, h: 260 },
   totems:   { Comp: TotemsThumb,        w: 460, h: 260 },
   bags:     { Comp: BagsThumb,          w: 460, h: 260 },
+  travel:   { Comp: TravelThumb,        w: 460, h: 260 },
   fbcover:  { Comp: FbCover,            w: 851, h: 315 },
 };
 
@@ -883,6 +917,7 @@ function App() {
       <Artboard id="questkey-thumb" label="Wick's Quest Key" w={460} h={260} Component={QuestKeyThumb}/>
       <Artboard id="totems-thumb" label="Wick's Totems and Things" w={460} h={260} Component={TotemsThumb}/>
       <Artboard id="bags-thumb" label="Wick's Bags" w={460} h={260} Component={BagsThumb}/>
+      <Artboard id="travel-thumb" label="Wick's Travel Form" w={460} h={260} Component={TravelThumb}/>
 
       <div className="section-label">Social · Facebook cover (851×315)</div>
       <Artboard id="fb-cover" label="Wick's Mods — Facebook Cover" w={851} h={315} Component={FbCover}/>

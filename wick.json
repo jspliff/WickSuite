@@ -205,6 +205,24 @@
         "Bank panel with buy-slot button"
       ],
       "repo": "WicksBags"
+    },
+    {
+      "folder": "WicksTravelForm",
+      "title": "Wick's Travel Form",
+      "short": "Travel Form",
+      "slash": "/wstf",
+      "tagline": "One druid keybind. Flight, Travel, Aquatic, or Cat — picked by where you are right now. Works around the broken TBC IsFlyableArea API.",
+      "short_tagline": "Smart shapeshift binding for druids",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "travel-form",
+      "cf_project_id": null,
+      "features": [
+        "Flight · Travel · Aquatic · Cat",
+        "Outland flyable-zone whitelist",
+        "Contextual icon preview"
+      ],
+      "repo": "WicksTravelForm"
     }
   ],
   "retired": [

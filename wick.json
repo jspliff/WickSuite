@@ -1,7 +1,7 @@
 {
   "$schema": "./wick.schema.json",
   "author": "Wick",
-  "author_email": "Jason@s-56.com",
+  "author_email": "wicksmods@gmail.com",
   "github_user": "Wicksmods",
   "cf_api_base": "https://wow.curseforge.com",
   "cf_game_version_id": 14300,

@@ -196,6 +196,18 @@ const PLAN = {
       ],
     },
     {
+      name: "Theorycraft",
+      channels: [
+        { name: "bis-templates", type: T.FORUM,
+          tags: [
+            { name: "Druid" },  { name: "Hunter" }, { name: "Mage" },
+            { name: "Paladin" }, { name: "Priest" }, { name: "Rogue" },
+            { name: "Shaman" }, { name: "Warlock" }, { name: "Warrior" },
+          ],
+          topic: "Share BIS templates exported from Wick's TBC BIS Tracker. One thread per template. Tag with your class, include phase, spec, and rationale." },
+      ],
+    },
+    {
       name: "LFG",
       channels: [
         { name: "lfg-dungeons", type: T.TEXT, topic: "Looking for group — 5-mans and heroics." },

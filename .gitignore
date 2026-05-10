@@ -17,6 +17,12 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Node / npm
+node_modules/
+package-lock.json
+.package-lock.json
+npm-debug.log*
+
 # Screenshots / exports
 exports/
 *.png

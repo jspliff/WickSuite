@@ -451,7 +451,10 @@ function cmdSync() {
     ...config.addons.map(a =>
       `| **${a.title}** | [repo](https://github.com/${config.github_user}/${a.repo}) | [CurseForge](https://www.curseforge.com/wow/addons/${a.cf_slug}) |`),
   ].join("\n");
-  const block = `${marker.start}\n${table}\n${marker.end}`;
+  const discord = config.social?.discord_invite
+    ? `\n\n**Community:** [Discord](${config.social.discord_invite})`
+    : "";
+  const block = `${marker.start}\n${table}${discord}\n${marker.end}`;
 
   // Each addon README + each MoreFromWick.lua + the suite README is one phase.
   const TOTAL = config.addons.length * 2 + 1;

@@ -17,7 +17,8 @@
     "fb_app_id": "2736806253352279",
     "discord_guild_id": "1502489273180487892",
     "discord_guild_name": "Wick's Mods",
-    "discord_invite": "https://discord.gg/GWGTMhYBZY"
+    "discord_invite": "https://discord.gg/GWGTMhYBZY",
+    "discord_announcements_channel_id": "1502850493658042391"
   },
   "addons": [
     {
@@ -226,6 +227,26 @@
         "Contextual icon preview"
       ],
       "repo": "WicksTravelForm"
+    },
+    {
+      "folder": "WicksWardrobe",
+      "title": "Wick's Wardrobe",
+      "short": "Wardrobe",
+      "slash": "/wwd",
+      "tagline": "Browse every TBC tier set and weapon on your own character. Click any item to preview it inline — no vendor required.",
+      "short_tagline": "Tier set and weapon preview browser",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-wardrobe",
+      "cf_project_id": 1540943,
+      "key": "wardrobe",
+      "icon": "wd",
+      "features": [
+        "All 9 classes, T4/T5/T6 + weapons",
+        "Inline DressUpModel preview",
+        "Save and replay named outfits"
+      ],
+      "repo": "WicksWardrobe"
     }
   ],
   "retired": [

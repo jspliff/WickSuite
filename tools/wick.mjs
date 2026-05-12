@@ -16,8 +16,10 @@
 //   - gh CLI authenticated (for scaffold's repo creation)
 //   - CURSEFORGE_API_TOKEN env var (for release's CF upload)
 //   - FB_WICKS_MODS_PAGE_TOKEN env var (optional; for the post-release FB announce).
-//     Falls back to deriving from the user token in C:\Users\jspli\OneDrive\Documents\keys.txt.
-//     Pass --no-announce to wick release to skip the FB post.
+//     Falls back to deriving from the user token in C:\Users\jspli\OneDrive\Documents\Wicksmodsinfo.txt.
+//   - DISCORD_BOT_TOKEN env var (optional; for the post-release Discord announce).
+//     Falls back to reading from the Discord section of Wicksmodsinfo.txt.
+//     Pass --no-announce to wick release to skip both social posts.
 
 import { execSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -293,6 +295,135 @@ function announceFB(addon, version, addonDir, config) {
   log(`  (FB: unexpected response, raw: ${resp.slice(0, 600)})`);
 }
 
+// ── Discord announce helpers ──────────────────────────────────────────────
+
+function resolveDiscordBotToken() {
+  const fromEnv = process.env.DISCORD_BOT_TOKEN;
+  if (fromEnv) return fromEnv;
+
+  const keysPath = "C:/Users/jspli/OneDrive/Documents/Wicksmodsinfo.txt";
+  if (!fs.existsSync(keysPath)) return null;
+  const keys = fs.readFileSync(keysPath, "utf8").replace(/\r/g, "");
+  // Discord bot tokens: base64url segment (24+ chars), dot, 6-char segment, dot, 27+ char segment.
+  // Match the first such token that appears after a "Discord" section header.
+  const m = keys.match(/Discord[\s\S]*?([A-Za-z0-9_-]{24,}\.[A-Za-z0-9_-]{6}\.[A-Za-z0-9_-]{27,})/i);
+  return m ? m[1] : null;
+}
+
+// Return the Discord #announcements channel ID. Checks wick.json first; if
+// missing, fetches the guild channel list, caches the result, and returns it.
+function resolveDiscordAnnouncementsChannel(config, token) {
+  if (config.social?.discord_announcements_channel_id) {
+    return config.social.discord_announcements_channel_id;
+  }
+  const guildId = config.social?.discord_guild_id;
+  if (!guildId) return null;
+
+  let resp;
+  try {
+    resp = runCapture(
+      `curl -s -H "Authorization: Bot ${token}" "https://discord.com/api/v10/guilds/${guildId}/channels"`
+    );
+  } catch (_) { return null; }
+  let channels;
+  try { channels = JSON.parse(resp); } catch (_) { return null; }
+  if (!Array.isArray(channels)) return null;
+  const ch = channels.find(c => c.type === 0 && c.name === "announcements");
+  if (!ch) return null;
+
+  // Cache in wick.json so we don't call the channels list endpoint every time.
+  config.social.discord_announcements_channel_id = ch.id;
+  writeConfig(config);
+  ok(`Discord: cached #announcements channel ID ${ch.id}`);
+  return ch.id;
+}
+
+function composeDiscordEmbed(addon, version, changelogBody) {
+  const cfUrl = `https://www.curseforge.com/wow/addons/${addon.cf_slug}`;
+  const descLines = [];
+  if (addon.tagline) descLines.push(addon.tagline);
+  if (changelogBody) {
+    const cleaned = changelogBody.replace(/\n{3,}/g, "\n\n").trim();
+    if (cleaned && !/^\(edit this entry/i.test(cleaned)) {
+      descLines.push("");
+      descLines.push("**What's new**");
+      const trimmed = cleaned.length > 2000
+        ? cleaned.slice(0, 2000).replace(/\s+\S*$/, "") + "..."
+        : cleaned;
+      descLines.push(trimmed);
+    }
+  }
+  // Parse accent hex → decimal int for Discord's color field.
+  const colorHex = (addon.accent || "#4FC778").replace(/^#/, "");
+  const color = parseInt(colorHex, 16);
+  return {
+    title: `${addon.title} ${version} is live`,
+    description: descLines.join("\n") || undefined,
+    color,
+    url: cfUrl,
+    footer: { text: "Wick's Mods · wicksmods.io" },
+  };
+}
+
+// Post a release announcement to the Wick's Mods Discord #announcements channel.
+// Best-effort: any failure is logged and swallowed.
+function announceDiscord(addon, version, addonDir, config) {
+  const marker = path.join(addonDir, `.wick-discord-announced-v${version}`);
+  if (fs.existsSync(marker)) {
+    log(`  (Discord: already announced v${version}, skipping — delete ${path.basename(marker)} to re-post)`);
+    return;
+  }
+
+  const token = resolveDiscordBotToken();
+  if (!token) {
+    log(`  (Discord: no bot token — set DISCORD_BOT_TOKEN or check Wicksmodsinfo.txt; skipping)`);
+    return;
+  }
+  const channelId = resolveDiscordAnnouncementsChannel(config, token);
+  if (!channelId) {
+    log(`  (Discord: could not resolve #announcements channel ID; skipping)`);
+    return;
+  }
+
+  const changelog = path.join(addonDir, "CHANGELOG.md");
+  const body = extractChangelogEntry(changelog, version);
+  const embed = composeDiscordEmbed(addon, version, body);
+  const payload = JSON.stringify({ embeds: [embed] });
+  const payloadPath = path.join(config.addons_root_local, `.wick-discord-payload-${addon.folder}.json`);
+  fs.writeFileSync(payloadPath, payload);
+
+  log(`\nPosting to Discord #announcements ...`);
+  let resp;
+  try {
+    resp = runCapture([
+      `curl -s -X POST`,
+      `-H "Authorization: Bot ${token}"`,
+      `-H "Content-Type: application/json"`,
+      `--data-binary "@${payloadPath}"`,
+      `"https://discord.com/api/v10/channels/${channelId}/messages"`,
+    ].join(" "));
+  } catch (e) {
+    log(`  (Discord: curl failed: ${e.message})`);
+    try { fs.rmSync(payloadPath); } catch (_) {}
+    return;
+  }
+  try { fs.rmSync(payloadPath); } catch (_) {}
+
+  let parsed = null;
+  try { parsed = JSON.parse(resp); } catch (_) {}
+  // Discord errors return { code: <int>, message: <string> }
+  if (parsed && parsed.code !== undefined && !parsed.id) {
+    log(`  (Discord: post failed: code=${parsed.code} message=${parsed.message})`);
+    return;
+  }
+  if (parsed && parsed.id) {
+    fs.writeFileSync(marker, `${new Date().toISOString()}\n${JSON.stringify(parsed)}\n`);
+    ok(`Discord: posted to #announcements (message id ${parsed.id})`);
+    return;
+  }
+  log(`  (Discord: unexpected response, raw: ${resp.slice(0, 400)})`);
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // list
 // ═══════════════════════════════════════════════════════════════════════════
@@ -552,8 +683,8 @@ async function cmdRelease(folder, newVer, ...flags) {
   const toc = path.join(dir, `${folder}.toc`);
   if (!fs.existsSync(toc)) die(`.toc not found: ${toc}`);
 
-  // 6 visible phases: bump → changelog → git → zip → CF upload → FB announce.
-  const TOTAL = noAnnounce ? 5 : 6;
+  // 7 visible phases: bump → changelog → git → zip → CF upload → FB announce → Discord announce.
+  const TOTAL = noAnnounce ? 5 : 7;
   const cmd   = `wick release ${folder} v${newVer}`;
 
   // ── Bump version in .toc ──────────────────────────────────────────
@@ -653,6 +784,15 @@ async function cmdRelease(folder, newVer, ...flags) {
     catch (e) { log(`  (FB: announce threw, swallowed: ${e.message})`); }
   }
 
+  // ── Announce on Discord (best effort) ────────────────────────────
+  if (noAnnounce) {
+    log(`  (Discord: --no-announce passed, skipping post)`);
+  } else {
+    setProgress(cmd, 7, TOTAL, "posting to Discord");
+    try { announceDiscord(addon, newVer, dir, config); }
+    catch (e) { log(`  (Discord: announce threw, swallowed: ${e.message})`); }
+  }
+
   // ── X (Twitter) intent URL — auto API is paywalled, click-to-post ──
   if (!noAnnounce) {
     const cfUrl = `https://www.curseforge.com/wow/addons/${addon.cf_slug}`;
@@ -678,6 +818,217 @@ async function cmdRelease(folder, newVer, ...flags) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// audit-secrets — scan all suite repos for accidentally committed secrets
+// ═══════════════════════════════════════════════════════════════════════════
+function cmdAuditSecrets() {
+  const config = readConfig();
+
+  // ── Build repo list ──────────────────────────────────────────────
+  const repos = [];
+  for (const addon of config.addons.filter(a => !a.benched)) {
+    const dir = path.join(config.addons_root_local, addon.folder);
+    if (fs.existsSync(path.join(dir, ".git"))) repos.push({ name: addon.folder, dir });
+  }
+  if (fs.existsSync(path.join(SUITE_DIR, ".git"))) {
+    repos.push({ name: "WickSuite", dir: SUITE_DIR });
+  }
+  const landingDir = path.join(config.project_home, "Wicksmods.github.io");
+  if (fs.existsSync(path.join(landingDir, ".git"))) {
+    repos.push({ name: "Wicksmods.github.io", dir: landingDir });
+  }
+
+  // ── Secret patterns ──────────────────────────────────────────────
+  // regex: used for Node.js content scan (working tree)
+  // git_regex: POSIX ERE passed to git log -G (history scan)
+  const PATTERNS = [
+    {
+      name: "Discord bot token",
+      regex: /[A-Za-z0-9_-]{24,}\.[A-Za-z0-9_-]{6}\.[A-Za-z0-9_-]{27,}/,
+      git_regex: "[A-Za-z0-9_-]{24,}\\.[A-Za-z0-9_-]{6}\\.[A-Za-z0-9_-]{27,}",
+      note: "Rotate: discord.com/developers/applications -> Bot -> Reset Token",
+    },
+    {
+      name: "Facebook Graph API token",
+      regex: /EAA[A-Za-z0-9_-]{50,}/,
+      git_regex: "EAA[A-Za-z0-9_-]{50,}",
+      note: "Invalidate: developers.facebook.com/tools/access_token",
+    },
+    {
+      name: "GitHub classic token",
+      regex: /ghp_[A-Za-z0-9]{36}/,
+      git_regex: "ghp_[A-Za-z0-9]{36}",
+      note: "Revoke: github.com/settings/tokens",
+    },
+    {
+      name: "GitHub fine-grained token",
+      regex: /github_pat_[A-Za-z0-9_]{82}/,
+      git_regex: "github_pat_[A-Za-z0-9_]{82}",
+      note: "Revoke: github.com/settings/tokens",
+    },
+    {
+      name: "Private key",
+      regex: /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
+      git_regex: "-----BEGIN.*PRIVATE KEY-----",
+      note: "Revoke and regenerate this key pair immediately",
+    },
+    {
+      name: "AWS access key",
+      regex: /AKIA[0-9A-Z]{16}/,
+      git_regex: "AKIA[0-9A-Z]{16}",
+      note: "Deactivate: console.aws.amazon.com/iam/",
+    },
+  ];
+
+  // Filenames that should never be tracked in git
+  const SENSITIVE_FILES = [
+    "Wicksmodsinfo.txt", "keys.txt", ".env", ".env.local",
+    "secrets.json", "credentials.json", "settings.local.json",
+  ];
+
+  const SKIP_EXT  = /\.(png|jpe?g|gif|ico|zip|whl|wasm|ttf|otf|exe|dll|so|bin|pdf)$/i;
+  const SKIP_PATH = /\bnode_modules\b/;
+  const MAX_FILE  = 2 * 1024 * 1024; // skip files > 2 MB
+
+  // ── Scan ─────────────────────────────────────────────────────────
+  log(`\nWick audit-secrets`);
+  log(`==================`);
+  log(`Scanning ${repos.length} repos — working tree + full history\n`);
+
+  const allFindings = [];
+
+  for (let i = 0; i < repos.length; i++) {
+    const { name, dir } = repos[i];
+    setProgress("wick audit-secrets", i + 1, repos.length, `scanning ${name}`);
+    const repoFindings = [];
+
+    // ── Working tree: sensitive filenames ──────────────────────────
+    let tracked = [];
+    try { tracked = runCapture(`git -C "${dir}" ls-files`).split("\n").filter(Boolean); }
+    catch (_) {}
+
+    for (const fname of SENSITIVE_FILES) {
+      if (tracked.some(f => f === fname || f.endsWith(`/${fname}`))) {
+        repoFindings.push({
+          where: "working-tree",
+          pattern: `Credentials file tracked: ${fname}`,
+          detail: fname,
+          note: `Remove from index: git rm --cached ${fname}  then add to .gitignore`,
+        });
+      }
+    }
+
+    // ── Working tree: pattern scan ─────────────────────────────────
+    for (const file of tracked) {
+      if (SKIP_EXT.test(file) || SKIP_PATH.test(file)) continue;
+      const full = path.join(dir, file.replace(/\//g, path.sep));
+      let content;
+      try { content = fs.readFileSync(full, "utf8"); } catch (_) { continue; }
+      if (content.length > MAX_FILE) continue;
+
+      const lines = content.split("\n");
+      for (let ln = 0; ln < lines.length; ln++) {
+        for (const p of PATTERNS) {
+          if (p.regex.test(lines[ln])) {
+            repoFindings.push({
+              where: "working-tree",
+              pattern: p.name,
+              detail: `${file}:${ln + 1}`,
+              note: p.note,
+            });
+          }
+        }
+      }
+    }
+
+    // ── History: sensitive filenames ever committed ────────────────
+    for (const fname of SENSITIVE_FILES) {
+      let out = "";
+      try { out = runCapture(`git -C "${dir}" log --all --oneline --diff-filter=A -- "${fname}"`); }
+      catch (_) {}
+      for (const commit of out.trim().split("\n").filter(Boolean)) {
+        repoFindings.push({
+          where: "history",
+          pattern: `Credentials file committed: ${fname}`,
+          detail: commit,
+          note: "Remove from history with git-filter-repo (see remediation below)",
+        });
+      }
+    }
+
+    // ── History: pattern scan via git log -G ───────────────────────
+    for (const p of PATTERNS) {
+      let out = "";
+      try {
+        out = runCapture(
+          `git -C "${dir}" log --all --oneline --no-merges -G "${p.git_regex}"`
+        );
+      } catch (_) {}
+      for (const commit of out.trim().split("\n").filter(Boolean)) {
+        repoFindings.push({
+          where: "history",
+          pattern: p.name,
+          detail: commit,
+          note: p.note,
+        });
+      }
+    }
+
+    // ── Per-repo output ────────────────────────────────────────────
+    if (repoFindings.length === 0) {
+      log(`  ${name}: clean`);
+    } else {
+      log(`  ${name}: ${repoFindings.length} finding${repoFindings.length === 1 ? "" : "s"}`);
+      for (const f of repoFindings) {
+        log(`    ! [${f.where}] ${f.pattern}`);
+        log(`      ${f.detail}`);
+      }
+    }
+    for (const f of repoFindings) allFindings.push({ ...f, repo: name, dir });
+  }
+
+  clearProgress();
+
+  // ── Summary ───────────────────────────────────────────────────────
+  log(`\n${"─".repeat(60)}`);
+  if (allFindings.length === 0) {
+    log(`\n✓ No secrets found across ${repos.length} repos.\n`);
+    return;
+  }
+
+  log(`\n! ${allFindings.length} finding${allFindings.length === 1 ? "" : "s"} across ${repos.length} repos\n`);
+  log(`IMPORTANT: Rotate any exposed credentials first. Scrubbing history does not`);
+  log(`invalidate a secret that was already cloned or cached by GitHub/CF/etc.\n`);
+
+  // Group by repo for remediation steps
+  const byRepo = {};
+  for (const f of allFindings) {
+    if (!byRepo[f.repo]) byRepo[f.repo] = { dir: f.dir, findings: [] };
+    byRepo[f.repo].findings.push(f);
+  }
+
+  log(`Remediation`);
+  log(`-----------`);
+  for (const [rName, { dir: rDir, findings: rFindings }] of Object.entries(byRepo)) {
+    log(`\n[${rName}]`);
+    const notes = [...new Set(rFindings.map(f => f.note).filter(Boolean))];
+    for (const n of notes) log(`  * ${n}`);
+    if (rFindings.some(f => f.where === "history")) {
+      log(`  To scrub from history:`);
+      log(`    pip install git-filter-repo          (if not installed)`);
+      log(`    cd "${rDir}"`);
+      log(`    # Create expressions.txt with one line per secret:`);
+      log(`    #   literal:<the_secret>==><REDACTED>`);
+      log(`    git filter-repo --force --replace-text expressions.txt`);
+      log(`    git push origin --force --all`);
+      log(`    git push origin --force --tags`);
+      log(`    # Also notify any collaborators to re-clone.`);
+    }
+  }
+  log("");
+  process.exitCode = 1;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Dispatch
 // ═══════════════════════════════════════════════════════════════════════════
 const [,, sub, ...rest] = process.argv;
@@ -686,10 +1037,11 @@ switch (sub) {
   case "scaffold": cmdScaffold(rest.join(" ")); break;
   case "sync":     cmdSync(); break;
   case "render":   cmdRender(); break;
-  case "release":  await cmdRelease(rest[0], rest[1], ...rest.slice(2)); break;
+  case "release":       await cmdRelease(rest[0], rest[1], ...rest.slice(2)); break;
+  case "audit-secrets": cmdAuditSecrets(); break;
   case "announce": {
     // Manually re-post a release announcement (e.g., if --no-announce was used,
-    // or the FB token wasn't set at release time, or you want to re-post).
+    // or a token wasn't set at release time, or you want to re-post).
     const folder = rest[0], ver = rest[1];
     if (!folder || !ver) die("usage: wick announce <folder> <version>");
     const cfg = readConfig();
@@ -697,6 +1049,7 @@ switch (sub) {
     if (!a) die(`addon not found in wick.json: ${folder}`);
     const dir = path.join(cfg.addons_root_local, folder);
     announceFB(a, ver, dir, cfg);
+    announceDiscord(a, ver, dir, cfg);
     break;
   }
   case undefined:
@@ -711,16 +1064,19 @@ usage:
   wick render                              run grab-artboards.mjs (thumbnails + banner)
   wick release <folder> <ver> [--no-announce]
                                            bump, commit, tag, push, zip, upload to CurseForge,
-                                           and post a release announcement to Wick's Mods on FB
-  wick announce <folder> <ver>             re-post a release announcement to FB (idempotent;
-                                           writes a marker file to dedupe)
+                                           and post a release announcement to FB + Discord
+  wick announce <folder> <ver>             re-post a release announcement to FB + Discord
+                                           (idempotent; writes marker files to dedupe)
+  wick audit-secrets                       scan all suite repos (working tree + full history)
+                                           for accidentally committed secrets; exits 1 if found
 
 examples:
   node tools/wick.mjs list
   node tools/wick.mjs scaffold "Wick's Aggro Meter"
   node tools/wick.mjs release WicksCDTracker 0.3.0
   node tools/wick.mjs release WicksCDTracker 0.3.0 --no-announce
-  node tools/wick.mjs announce WicksQuestKey 1.0.0`);
+  node tools/wick.mjs announce WicksQuestKey 1.0.0
+  node tools/wick.mjs audit-secrets`);
     break;
   default:
     die(`unknown subcommand: ${sub}\n(try: wick --help)`);

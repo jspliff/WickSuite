@@ -229,6 +229,26 @@
       "repo": "WicksTravelForm"
     },
     {
+      "folder": "WicksLedger",
+      "title": "Wick's Ledger",
+      "short": "Ledger",
+      "slash": "/wledger",
+      "tagline": "Session earnings tracker for TBC Classic. Loot drops valued against TSM, Auctionator, or Auctioneer prices. Raw gold, item drops, and a running total in one slim panel.",
+      "short_tagline": "Session earnings tracker with AH-priced loot",
+      "accent": "#4FC778",
+      "accent_name": "fel-green",
+      "cf_slug": "wicks-ledger",
+      "cf_project_id": 1542398,
+      "key": "ledger",
+      "icon": "le",
+      "features": [
+        "TSM / Auctionator / Auctioneer prices",
+        "Auto-start on instance entry",
+        "Expandable itemized breakdown"
+      ],
+      "repo": "WicksLedger"
+    },
+    {
       "folder": "WicksWardrobe",
       "title": "Wick's Wardrobe",
       "short": "Wardrobe",

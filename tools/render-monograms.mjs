@@ -19,6 +19,8 @@ const TILES = [
   { id: "wick-logo-tt-512",     slug: "totems",    out: "logo-512.png", w: 512, h: 512 },
   { id: "wick-logo-wd-256",     slug: "wardrobe",  out: "logo-256.png", w: 256, h: 256 },
   { id: "wick-logo-wd-512",     slug: "wardrobe",  out: "logo-512.png", w: 512, h: 512 },
+  { id: "wick-logo-le-256",     slug: "ledger",    out: "logo-256.png", w: 256, h: 256 },
+  { id: "wick-logo-le-512",     slug: "ledger",    out: "logo-512.png", w: 512, h: 512 },
 ];
 
 const browser = await puppeteer.launch({

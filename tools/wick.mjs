@@ -579,7 +579,7 @@ function cmdSync() {
   const table = [
     "| Addon | GitHub | CurseForge |",
     "|---|---|---|",
-    ...config.addons.map(a =>
+    ...config.addons.filter(a => !a.benched).map(a =>
       `| **${a.title}** | [repo](https://github.com/${config.github_user}/${a.repo}) | [CurseForge](https://www.curseforge.com/wow/addons/${a.cf_slug}) |`),
   ].join("\n");
   const discord = config.social?.discord_invite
@@ -632,7 +632,7 @@ function cmdSync() {
     const mfwPath = path.join(config.addons_root_local, a.folder, "MoreFromWick.lua");
     if (!fs.existsSync(mfwPath)) continue;
     const rows = config.addons
-      .filter(x => x.folder !== a.folder && x.cf_project_id)
+      .filter(x => !x.benched && x.folder !== a.folder && x.cf_project_id)
       .map(x => {
         const tag = x.short_tagline || x.tagline || "";
         return `    { folder = "${luaEsc(x.folder)}", title = "${luaEsc(x.title)}", tagline = "${luaEsc(tag)}", slug = "${luaEsc(x.cf_slug)}" },`;

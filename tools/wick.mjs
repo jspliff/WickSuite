@@ -736,7 +736,9 @@ async function cmdRelease(folder, newVer, ...flags) {
   // ── Zip the addon folder ─────────────────────────────────────────
   setProgress(cmd, 4, TOTAL, "building release zip");
   const zipName = `${folder}-v${newVer}.zip`;
-  const zipPath = path.join(config.addons_root_local, zipName);
+  // AddOns root is often write-protected; use %TEMP% which is always writable.
+  const zipDir = process.env.TEMP || process.env.TMP || config.addons_root_local;
+  const zipPath = path.join(zipDir, zipName);
   if (fs.existsSync(zipPath)) fs.rmSync(zipPath);
   // Compress-Archive writes backslash ZIP entries which CF rejects — use ZipArchive directly.
   const psZip = [
@@ -771,7 +773,7 @@ async function cmdRelease(folder, newVer, ...flags) {
     changelogType: "markdown",
     displayName: `${addon.title} v${newVer}`,
   });
-  const metaPath = path.join(config.addons_root_local, `.wick-cf-meta-${folder}.json`);
+  const metaPath = path.join(zipDir, `.wick-cf-meta-${folder}.json`);
   // Buffer.from ensures BOM-free UTF-8 — a bare writeFileSync on some Node/PS combos emits a BOM
   // which CF returns as errorCode 1002 "Invalid JSON" with no hint it's a BOM issue.
   fs.writeFileSync(metaPath, Buffer.from(metadata, "utf8"));

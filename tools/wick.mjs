@@ -738,9 +738,24 @@ async function cmdRelease(folder, newVer, ...flags) {
   const zipName = `${folder}-v${newVer}.zip`;
   const zipPath = path.join(config.addons_root_local, zipName);
   if (fs.existsSync(zipPath)) fs.rmSync(zipPath);
-  // Use PowerShell Compress-Archive (Windows built-in)
-  const psCmd = `powershell -NoProfile -Command "Compress-Archive -Path '${dir}' -DestinationPath '${zipPath}' -Force"`;
-  run(psCmd);
+  // Compress-Archive writes backslash ZIP entries which CF rejects — use ZipArchive directly.
+  const psZip = [
+    `Add-Type -AssemblyName System.IO.Compression`,
+    `Add-Type -AssemblyName System.IO.Compression.FileSystem`,
+    `$src = '${dir.replace(/'/g, "''")}'`,
+    `$dst = '${zipPath.replace(/'/g, "''")}'`,
+    `$folder = '${folder}'`,
+    `$stream = [System.IO.File]::Open($dst, [System.IO.FileMode]::Create)`,
+    `$zip = New-Object System.IO.Compression.ZipArchive($stream, [System.IO.Compression.ZipArchiveMode]::Create)`,
+    `try {`,
+    `  foreach ($f in Get-ChildItem -Path $src -Recurse -File -Force) {`,
+    `    $rel = $f.FullName.Substring($src.Length + 1).Replace('\\', '/')`,
+    `    if ($rel -like '.git/*' -or $rel -like '.claude/*' -or $rel -eq '.gitignore') { continue }`,
+    `    [void][System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $f.FullName, $folder + '/' + $rel, [System.IO.Compression.CompressionLevel]::Optimal)`,
+    `  }`,
+    `} finally { $zip.Dispose(); $stream.Dispose() }`,
+  ].join("; ");
+  run(`powershell -NoProfile -Command "${psZip}"`);
   ok(`zip: ${zipName}`);
 
   // ── Upload to CurseForge ─────────────────────────────────────────
@@ -757,11 +772,13 @@ async function cmdRelease(folder, newVer, ...flags) {
     displayName: `${addon.title} v${newVer}`,
   });
   const metaPath = path.join(config.addons_root_local, `.wick-cf-meta-${folder}.json`);
-  fs.writeFileSync(metaPath, metadata);
+  // Buffer.from ensures BOM-free UTF-8 — a bare writeFileSync on some Node/PS combos emits a BOM
+  // which CF returns as errorCode 1002 "Invalid JSON" with no hint it's a BOM issue.
+  fs.writeFileSync(metaPath, Buffer.from(metadata, "utf8"));
   const uploadCmd = [
     `curl -s -X POST`,
     `-H "X-Api-Token: ${token}"`,
-    `-F "metadata=<${metaPath}"`,
+    `--form-string "metadata=$(cat '${metaPath.replace(/'/g, "'\\''")}')"`,
     `-F "file=@${zipPath}"`,
     `"${config.cf_api_base}/api/projects/${addon.cf_project_id}/upload-file"`,
   ].join(" ");
